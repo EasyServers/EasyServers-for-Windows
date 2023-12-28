@@ -172,11 +172,11 @@ namespace EasyServers
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
 			}
-			if (serverSendTextVaild)
+			if (serverSendTextVaild && sDoneSwitch)
 			{
 				serverSendButton.Enabled = false;
 			}
-			else if (!serverSendTextVaild)
+			else if (!serverSendTextVaild && sDoneSwitch)
 			{
 				serverSendButton.Enabled = true;
 			}
@@ -304,12 +304,16 @@ namespace EasyServers
 						while (!sCloseSwitch)
 						{
 							string? command = cmdInputTextBox.Text;
-							if (!string.IsNullOrEmpty(command) && Regex.IsMatch(command, @"^ ") && serverSendTextVaild)
+							if (!string.IsNullOrEmpty(command) && serverSendTextVaild)
 							{
 								serverSendTextVaild = false;
 								await sinput.WriteLineAsync(command);
 								command = "";
 								cmdInputTextBox.Text = "";
+							}
+							else
+							{
+								command = "";
 							}
 						}
 					}
@@ -371,8 +375,8 @@ namespace EasyServers
 
 		private void SendButton_Click(object? sender, EventArgs e)
 		{
-			string? str = inputTextBox.Text;
-			if (string.IsNullOrEmpty(str) && Regex.IsMatch(str, @"^ "))
+			string? str = "say " + inputTextBox.Text;
+			if (!string.IsNullOrEmpty(str))
 			{
 				ServerControlPanelForm.cmdInputTextBox.Text = str;
 				ServerControlPanelForm.serverSendTextVaild = true;
