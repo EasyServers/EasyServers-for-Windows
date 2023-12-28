@@ -153,11 +153,11 @@ namespace EasyServers
 				{
 					if (proc != null && !proc.HasExited)
 					{
-						if (Regex.IsMatch(cmdLogTextBox.Text, @"\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done"))
+						if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done \([0-9]+\.[0-9]{1,3}s\)\! For help, type ""help""", RegexOptions.Multiline) && !Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Stopping server", RegexOptions.Multiline))
 						{
 							await proc.StandardInput.WriteLineAsync("stop");
+							proc.WaitForExit();
 						}
-						proc.WaitForExit();
 						proc.Close();
 					}
 				}
@@ -197,7 +197,7 @@ namespace EasyServers
 			{
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
-				serverStopButton.Enabled = true;
+				serverStopButton.Enabled = false;
 			}
 		}
 
