@@ -9,14 +9,15 @@ namespace EasyServers
 		private static OpenFileDialog ofd = new OpenFileDialog();
 
 		private static TextBox cmdLogTextBox = new TextBox();
-		private static TextBox cmdInputTextBox = new TextBox();
+		public static TextBox cmdInputTextBox = new TextBox();
 		private static Button serverSendButton = new Button();
+		private static Button shortcutButton1 = new Button();
 
 		private static Process proc = new Process();
 		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
 		public static string cmdLog = "";
-		private static bool serverSendTextVaild = false;
+		public static bool serverSendTextVaild = false;
 
 		public ServerControlPanelForm()
 		{
@@ -41,8 +42,9 @@ namespace EasyServers
 			{
 				Name = "cmdLog",
 				Text = "",
+				WordWrap = true,
 				Multiline = true,
-				ScrollBars = ScrollBars.Vertical,
+				ScrollBars = ScrollBars.Both,
 				BorderStyle = BorderStyle.FixedSingle,
 				Font = new Font("Yu Gothic UI", 10.75F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Size = new Size(495, 320),
@@ -57,12 +59,12 @@ namespace EasyServers
 			{
 				Name = "cmdInput",
 				Text = "",
-				PlaceholderText = "サーバーに送るコマンドやメッセージをここに記入",
+				PlaceholderText = "サーバーに送るコマンドをここに記入",
 				Multiline = false,
 				BorderStyle = BorderStyle.FixedSingle,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Size = new Size(414, 23),
-				Location = new Point(373, 371),
+				Location = new Point(373, 400),
 				TabIndex = 1,
 				TabStop = true
 			};
@@ -71,8 +73,8 @@ namespace EasyServers
 
 			serverSendButton = new Button()
 			{
-				Location = new Point(793, 371),
-				Name = "ServerSend Button",
+				Location = new Point(793, 400),
+				Name = "ServerSendButton",
 				Size = new Size(75, 23),
 				TabIndex = 2,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -89,9 +91,28 @@ namespace EasyServers
 			};
 			timer.Tick += new EventHandler(Timer_Tick);
 
+			shortcutButton1 = new Button()
+			{
+				Location = new Point(373, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(92, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "メッセージ送信",
+				UseVisualStyleBackColor = true
+			};
+			shortcutButton1.Click += new EventHandler(ShortcutButton1_Click);
+
 			this.Controls.Add(cmdLogTextBox);
 			this.Controls.Add(cmdInputTextBox);
 			this.Controls.Add(serverSendButton);
+			this.Controls.Add(shortcutButton1);
+		}
+
+		private void ShortcutButton1_Click(object? sender, EventArgs e)
+		{
+			SayCommandShortForm form = new SayCommandShortForm();
+			form.Show(this);
 		}
 
 		private static async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
@@ -146,7 +167,7 @@ namespace EasyServers
 				sDoneSwitch = true;
 				serverSendButton.Enabled = true;
 			}
-			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
+			else if (Regex.IsMatch(cmdLogTextBox.Text, @"\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server") && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
@@ -283,7 +304,7 @@ namespace EasyServers
 						while (!sCloseSwitch)
 						{
 							string? command = cmdInputTextBox.Text;
-							if (!string.IsNullOrEmpty(command) && serverSendTextVaild)
+							if (!string.IsNullOrEmpty(command) && Regex.IsMatch(command, @"^ ") && serverSendTextVaild)
 							{
 								serverSendTextVaild = false;
 								await sinput.WriteLineAsync(command);
@@ -299,6 +320,64 @@ namespace EasyServers
 					serverSendTextVaild = false;
 				}
 			});
+		}
+	}
+
+	partial class SayCommandShortForm : Form
+	{
+		private static Button sendButton = new Button();
+		private static TextBox inputTextBox = new TextBox();
+		public SayCommandShortForm()
+		{
+			this.SuspendLayout();
+			this.AutoScaleDimensions = new SizeF(7F, 15F);
+			this.AutoScaleMode = AutoScaleMode.Font;
+			this.Name = "SayCommandShortForm";
+			this.Text = "ショートカット";
+			this.Size = new Size(370, 130);
+			this.ClientSize = new Size(354, 91);
+			this.ResumeLayout(false);
+			this.FormBorderStyle = FormBorderStyle.FixedDialog;
+			this.ShowIcon = false;
+			this.StartPosition = FormStartPosition.CenterScreen;
+			this.MaximizeBox = false;
+			this.PerformLayout();
+
+			sendButton = new Button()
+			{
+				Location = new Point(267, 62),
+				Name = "button3",
+				Size = new Size(75, 23),
+				TabIndex = 0,
+				Text = "送信",
+				UseVisualStyleBackColor = true,
+			};
+			sendButton.Click += new EventHandler(SendButton_Click);
+
+			inputTextBox = new TextBox()
+			{
+				Location = new Point(12, 33),
+				Name = "inputTextBox",
+				Text = "",
+				PlaceholderText = "ここにサーバーに送りたいメッセージを記入",
+				Size = new Size(330, 23),
+				TabIndex = 1,
+				WordWrap = false
+			};
+
+			this.Controls.Add(sendButton);
+			this.Controls.Add(inputTextBox);
+		}
+
+		private void SendButton_Click(object? sender, EventArgs e)
+		{
+			string? str = inputTextBox.Text;
+			if (string.IsNullOrEmpty(str) && Regex.IsMatch(str, @"^ "))
+			{
+				ServerControlPanelForm.cmdInputTextBox.Text = str;
+				ServerControlPanelForm.serverSendTextVaild = true;
+				this.Close();
+			}
 		}
 	}
 }
