@@ -149,7 +149,6 @@ namespace EasyServers
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
-				sStartFlag = false;
 				serverSendButton.Enabled = false;
 			}
 			if (serverSendTextVaild)
