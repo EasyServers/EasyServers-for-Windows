@@ -67,7 +67,6 @@ namespace EasyServers
 				TabIndex = 1,
 				TabStop = true
 			};
-			cmdInputTextBox.KeyPress += new KeyPressEventHandler(CmdInputTextBox_KeyPress);
 
 			serverSendButton = new Button()
 			{
@@ -92,11 +91,6 @@ namespace EasyServers
 			this.Controls.Add(cmdLogTextBox);
 			this.Controls.Add(cmdInputTextBox);
 			this.Controls.Add(serverSendButton);
-		}
-
-		private async void CmdInputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
-		{
-			await ServerSendTaskAsync();
 		}
 
 		private static async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
@@ -168,11 +162,6 @@ namespace EasyServers
 		}
 
 		private async void ServerSendButton_Click(object? sender, EventArgs e)
-		{
-			await ServerSendTaskAsync();
-		}
-
-		private async Task ServerSendTaskAsync()
 		{
 			if (serverValid && !string.IsNullOrEmpty(cmdInputTextBox.Text))
 			{
