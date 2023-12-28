@@ -16,7 +16,6 @@ namespace EasyServers
 		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
 		public static string cmdLog = "";
-		private static bool serverValid = false;
 		private static bool serverSendTextVaild = false;
 
 		public ServerControlPanelForm()
@@ -145,20 +144,11 @@ namespace EasyServers
 			if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done \([0-9]+\.[0-9]{1,3}s\)\! For help, type ""help""", RegexOptions.Multiline) && !sDoneSwitch)
 			{
 				sDoneSwitch = true;
-				serverValid = true;
+				serverSendButton.Enabled = true;
 			}
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
-				serverValid = false;
-			}
-
-			if (serverValid || !serverSendTextVaild)
-			{
-				serverSendButton.Enabled = true;
-			}
-			else if (!serverValid || serverSendTextVaild)
-			{
 				serverSendButton.Enabled = false;
 			}
 		}
@@ -192,7 +182,7 @@ namespace EasyServers
 
 		private async Task ServerSendTask()
 		{
-			if (serverValid && !string.IsNullOrEmpty(cmdInputTextBox.Text))
+			if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
 			{
 				serverSendTextVaild = true;
 			}
