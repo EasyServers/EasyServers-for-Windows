@@ -94,11 +94,6 @@ namespace EasyServers
 			this.Controls.Add(serverSendButton);
 		}
 
-		private async void CmdInputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
-		{
-			await ServerSendTaskAsync();
-		}
-
 		private static async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
 		{
 			await FromClosing_Task();
@@ -169,10 +164,14 @@ namespace EasyServers
 
 		private async void ServerSendButton_Click(object? sender, EventArgs e)
 		{
-			await ServerSendTaskAsync();
+			await ServerSendTask();
 		}
 
-		private async Task ServerSendTaskAsync()
+		private async void CmdInputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
+		{
+			await ServerSendTask();
+		}
+		private async Task ServerSendTask()
 		{
 			if (serverValid && !string.IsNullOrEmpty(cmdInputTextBox.Text))
 			{
