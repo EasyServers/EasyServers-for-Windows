@@ -68,6 +68,7 @@ namespace EasyServers
 				TabStop = true
 			};
 			cmdInputTextBox.KeyPress += new KeyPressEventHandler(CmdInputTextBox_KeyPress);
+			cmdInputTextBox.KeyDown += new KeyEventHandler(CmdInputTextBox_KeyDown);
 
 			serverSendButton = new Button()
 			{
@@ -167,10 +168,28 @@ namespace EasyServers
 			await ServerSendTask();
 		}
 
-		private async void CmdInputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
+		private void CmdInputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
 		{
-			await ServerSendTask();
+			if (e.KeyChar == (char)Keys.Enter)
+			{
+				e.Handled = true;
+			}
+			else
+			{
+				e.Handled = false;
+			}
 		}
+
+		private async void CmdInputTextBox_KeyDown(object? sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Enter:
+					await ServerSendTask();
+					break;
+			}
+		}
+
 		private async Task ServerSendTask()
 		{
 			if (serverValid && !string.IsNullOrEmpty(cmdInputTextBox.Text))
@@ -180,15 +199,18 @@ namespace EasyServers
 
 			if (serverSendTextVaild)
 			{
-				await Task.Run(async () =>
+				await Task.Run(() =>
 				{
 					try
 					{
+						string? command = cmdInputTextBox.Text;
+
 						using (StreamWriter sinput = proc.StandardInput)
 						{
-							string? command = cmdInputTextBox.Text;
-
-							await sinput.WriteLineAsync(command);
+							if (sinput.BaseStream.CanWrite)
+							{
+								sinput.WriteLine(command);
+							}
 						}
 						cmdInputTextBox.Text = "";
 						serverSendTextVaild = false;
