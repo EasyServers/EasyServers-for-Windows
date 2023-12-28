@@ -137,10 +137,10 @@ namespace EasyServers
 			mfm.Show();
 		}
 
+		private bool sDoneSwitch = false;
+		private bool sCloseSwitch = false;
 		private void Timer_Tick(object? sender, EventArgs e)
 		{
-			bool sDoneSwitch = false;
-			bool sCloseSwitch = false;
 			if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done \([0-9]+\.[0-9]{1,3}s\)\! For help, type ""help""", RegexOptions.Multiline) && !sDoneSwitch)
 			{
 				sDoneSwitch = true;
@@ -151,11 +151,22 @@ namespace EasyServers
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
 			}
+			if (serverSendTextVaild)
+			{
+				serverSendButton.Enabled = false;
+			}
+			else if (!serverSendTextVaild)
+			{
+				serverSendButton.Enabled = true;
+			}
 		}
 
-		private async void ServerSendButton_Click(object? sender, EventArgs e)
+		private void ServerSendButton_Click(object? sender, EventArgs e)
 		{
-			await ServerSendTask();
+			if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
+			{
+				serverSendTextVaild = true;
+			}
 		}
 
 		private void CmdInputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
@@ -170,47 +181,16 @@ namespace EasyServers
 			}
 		}
 
-		private async void CmdInputTextBox_KeyDown(object? sender, KeyEventArgs e)
+		private void CmdInputTextBox_KeyDown(object? sender, KeyEventArgs e)
 		{
 			switch (e.KeyCode)
 			{
 				case Keys.Enter:
-					await ServerSendTask();
+					if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
+					{
+						serverSendTextVaild = true;
+					}
 					break;
-			}
-		}
-
-		private async Task ServerSendTask()
-		{
-			if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
-			{
-				serverSendTextVaild = true;
-			}
-
-			if (serverSendTextVaild)
-			{
-				await Task.Run(() =>
-				{
-					try
-					{
-						string? command = cmdInputTextBox.Text;
-
-						using (StreamWriter sinput = proc.StandardInput)
-						{
-							if (sinput.BaseStream.CanWrite)
-							{
-								sinput.WriteLine(command);
-							}
-						}
-						cmdInputTextBox.Text = "";
-						serverSendTextVaild = false;
-					}
-					catch (Exception ex)
-					{
-						cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Input Error]: " + ex.Message + "\r\n";
-						serverSendTextVaild = false;
-					}
-				});
 			}
 		}
 
@@ -257,34 +237,65 @@ namespace EasyServers
 				};
 				proc.Start();
 
-				await Task.Run(async () =>
-				{
-					try
-					{
-						using (StreamReader srd = proc.StandardOutput)
-						{
-							while (!srd.EndOfStream)
-							{
-								string? _output = await srd.ReadLineAsync();
-								if (!string.IsNullOrEmpty(_output))
-								{
-									Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-									byte[] bytesData = Encoding.UTF8.GetBytes(_output);
-									Encoding utf8Enc = Encoding.UTF8;
-									string output = utf8Enc.GetString(bytesData);
+				await OutputCmdLogAsync();
+				await ServerSendAsync();
+			}
+		}
 
-									output = output.Replace("\r\r\n", "\r\n");
-									cmdLogTextBox.AppendText(output + Environment.NewLine);
-								}
+		private async Task OutputCmdLogAsync()
+		{
+			try
+			{
+				using (StreamReader srd = proc.StandardOutput)
+				{
+					while (!srd.EndOfStream)
+					{
+						string? _output = await srd.ReadLineAsync();
+						if (!string.IsNullOrEmpty(_output))
+						{
+							Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+							byte[] bytesData = Encoding.UTF8.GetBytes(_output);
+							Encoding utf8Enc = Encoding.UTF8;
+							string output = utf8Enc.GetString(bytesData);
+
+							output = output.Replace("\r\r\n", "\r\n");
+							cmdLogTextBox.AppendText(output + Environment.NewLine);
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Output Error]: " + ex.Message + "\r\n";
+			}
+		}
+
+		private async Task ServerSendAsync()
+		{
+			await Task.Run(async () =>
+			{
+				try
+				{
+					string? command = cmdInputTextBox.Text;
+					using (StreamWriter sinput = proc.StandardInput)
+					{
+						while (!sCloseSwitch)
+						{
+							if (!string.IsNullOrEmpty(command) && serverSendTextVaild)
+							{
+								serverSendTextVaild = false;
+								await sinput.WriteLineAsync(command);
+								cmdInputTextBox.Text = "";
 							}
 						}
 					}
-					catch (Exception ex)
-					{
-						cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Output Error]: " + ex.Message + "\r\n";
-					}
-				});
-			}
+				}
+				catch (Exception ex)
+				{
+					cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Input Error]: " + ex.Message + "\r\n";
+					serverSendTextVaild = false;
+				}
+			});
 		}
 	}
 }
