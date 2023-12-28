@@ -193,7 +193,7 @@ namespace EasyServers
 				serverSendButton.Enabled = true;
 				serverStopButton.Enabled = true;
 			}
-			else if (Regex.IsMatch(cmdLogTextBox.Text, @"\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server") && !sCloseSwitch)
+			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
@@ -373,7 +373,7 @@ namespace EasyServers
 			this.ResumeLayout(false);
 			this.FormBorderStyle = FormBorderStyle.FixedDialog;
 			this.ShowIcon = false;
-			this.StartPosition = FormStartPosition.CenterParent;
+			this.StartPosition = FormStartPosition.CenterScreen;
 			this.MaximizeBox = false;
 			this.PerformLayout();
 
