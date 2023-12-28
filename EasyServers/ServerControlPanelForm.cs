@@ -237,11 +237,10 @@ namespace EasyServers
 				};
 				proc.Start();
 
-				var tasks = new List<Task>();
-				tasks.Add(OutputCmdLogAsync());
-				tasks.Add(ServerSendAsync());
-
-				await Task.WhenAll(tasks);
+				await Task.Run(async () =>
+				{
+					await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
+				});
 			}
 		}
 
@@ -279,15 +278,16 @@ namespace EasyServers
 			{
 				try
 				{
-					string? command = cmdInputTextBox.Text;
 					using (StreamWriter sinput = proc.StandardInput)
 					{
 						while (!sCloseSwitch)
 						{
+							string? command = cmdInputTextBox.Text;
 							if (!string.IsNullOrEmpty(command) && serverSendTextVaild)
 							{
 								serverSendTextVaild = false;
 								await sinput.WriteLineAsync(command);
+								command = "";
 								cmdInputTextBox.Text = "";
 							}
 						}
