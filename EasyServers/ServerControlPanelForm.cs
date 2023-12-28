@@ -373,7 +373,7 @@ namespace EasyServers
 			this.ResumeLayout(false);
 			this.FormBorderStyle = FormBorderStyle.FixedDialog;
 			this.ShowIcon = false;
-			this.StartPosition = FormStartPosition.CenterScreen;
+			this.StartPosition = FormStartPosition.CenterParent;
 			this.MaximizeBox = false;
 			this.PerformLayout();
 
