@@ -12,6 +12,7 @@ namespace EasyServers
 		public static TextBox cmdInputTextBox = new TextBox();
 		private static Button serverSendButton = new Button();
 		private static Button shortcutButton1 = new Button();
+		private static Button serverStopButton = new Button();
 
 		private static Process proc = new Process();
 		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -103,10 +104,33 @@ namespace EasyServers
 			};
 			shortcutButton1.Click += new EventHandler(ShortcutButton1_Click);
 
+			serverStopButton = new Button()
+			{
+				Location = new Point(373, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(92, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "メッセージ送信",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+			serverStopButton.Click += new EventHandler(ServerStopButton_Click);
+
 			this.Controls.Add(cmdLogTextBox);
 			this.Controls.Add(cmdInputTextBox);
 			this.Controls.Add(serverSendButton);
 			this.Controls.Add(shortcutButton1);
+		}
+
+		private void ServerStopButton_Click(object? sender, EventArgs e)
+		{
+			DialogResult result = MessageBox.Show("本当にサーバーを停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (result == DialogResult.Yes)
+			{
+				cmdInputTextBox.Text = "stop";
+				serverSendTextVaild = true;
+			}
 		}
 
 		private void ShortcutButton1_Click(object? sender, EventArgs e)
@@ -166,19 +190,13 @@ namespace EasyServers
 			{
 				sDoneSwitch = true;
 				serverSendButton.Enabled = true;
+				serverStopButton.Enabled = true;
 			}
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server") && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
-			}
-			if (serverSendTextVaild && sDoneSwitch)
-			{
-				serverSendButton.Enabled = false;
-			}
-			else if (!serverSendTextVaild && sDoneSwitch)
-			{
-				serverSendButton.Enabled = true;
+				serverStopButton.Enabled = true;
 			}
 		}
 
@@ -240,28 +258,35 @@ namespace EasyServers
 
 		private async Task ExecuteCommandAsync(string? jarFilePath, int xms = 2, int xmx = 2)
 		{
-			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-			using (proc = new Process())
+			try
 			{
-				proc.StartInfo = new ProcessStartInfo()
-				{
-					FileName = "cmd.exe",
-					UseShellExecute = false,
-					CreateNoWindow = true,
-					Arguments = $"/c cd {Path.GetDirectoryName(jarFilePath)} & java -Xms{xms.ToString()}G -Xmx{xmx.ToString()}G -jar \"{Path.GetFileName(jarFilePath)}\" nogui",
-					Verb = "RunAs",
-					RedirectStandardOutput = true,
-					RedirectStandardInput = true,
-					StandardOutputEncoding = Encoding.GetEncoding("Shift_JIS"),
-					StandardInputEncoding = Encoding.GetEncoding("Shift_JIS")
-				};
-				proc.Start();
+				Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-				await Task.Run(async () =>
+				using (proc = new Process())
 				{
-					await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
-				});
+					proc.StartInfo = new ProcessStartInfo()
+					{
+						FileName = "cmd.exe",
+						UseShellExecute = false,
+						CreateNoWindow = true,
+						Arguments = $"/c cd {Path.GetDirectoryName(jarFilePath)} & java -Xms{xms.ToString()}G -Xmx{xmx.ToString()}G -jar \"{Path.GetFileName(jarFilePath)}\" nogui",
+						Verb = "RunAs",
+						RedirectStandardOutput = true,
+						RedirectStandardInput = true,
+						StandardOutputEncoding = Encoding.GetEncoding("Shift_JIS"),
+						StandardInputEncoding = Encoding.GetEncoding("Shift_JIS")
+					};
+					proc.Start();
+
+					await Task.Run(async () =>
+					{
+						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("エラーが発生しました！\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
