@@ -106,12 +106,12 @@ namespace EasyServers
 
 			serverStopButton = new Button()
 			{
-				Location = new Point(373, 371),
+				Location = new Point(793, 371),
 				Name = "SayShortCutButton",
-				Size = new Size(92, 23),
+				Size = new Size(75, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "メッセージ送信",
+				Text = "停止",
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
@@ -121,6 +121,7 @@ namespace EasyServers
 			this.Controls.Add(cmdInputTextBox);
 			this.Controls.Add(serverSendButton);
 			this.Controls.Add(shortcutButton1);
+			this.Controls.Add(serverStopButton);
 		}
 
 		private void ServerStopButton_Click(object? sender, EventArgs e)
@@ -205,6 +206,7 @@ namespace EasyServers
 			if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
 			{
 				serverSendTextVaild = true;
+				serverSendButton.Enabled = false;
 			}
 		}
 
@@ -228,6 +230,7 @@ namespace EasyServers
 					if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
 					{
 						serverSendTextVaild = true;
+						serverSendButton.Enabled = false;
 					}
 					break;
 			}
@@ -335,10 +338,12 @@ namespace EasyServers
 								await sinput.WriteLineAsync(command);
 								command = "";
 								cmdInputTextBox.Text = "";
+								serverSendButton.Enabled = true;
 							}
 							else
 							{
 								command = "";
+								serverSendButton.Enabled = true;
 							}
 						}
 					}
