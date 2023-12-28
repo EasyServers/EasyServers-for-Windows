@@ -129,7 +129,7 @@ namespace EasyServers
 
 		private void ServerStopButton_Click(object? sender, EventArgs e)
 		{
-			DialogResult result = MessageBox.Show("本当にサーバーを停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			DialogResult result = MessageBox.Show("本当にサーバーを停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 			if (result == DialogResult.Yes)
 			{
 				cmdInputTextBox.Text = "stop";
@@ -211,7 +211,6 @@ namespace EasyServers
 			if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
 			{
 				serverSendTextVaild = true;
-				serverSendButton.Enabled = false;
 			}
 		}
 
@@ -235,7 +234,6 @@ namespace EasyServers
 					if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
 					{
 						serverSendTextVaild = true;
-						serverSendButton.Enabled = false;
 					}
 					break;
 			}
@@ -343,12 +341,6 @@ namespace EasyServers
 								await sinput.WriteLineAsync(command);
 								command = "";
 								cmdInputTextBox.Text = "";
-								serverSendButton.Enabled = true;
-							}
-							else
-							{
-								command = "";
-								serverSendButton.Enabled = true;
 							}
 						}
 					}
@@ -410,7 +402,7 @@ namespace EasyServers
 
 		private void SendButton_Click(object? sender, EventArgs e)
 		{
-			string? str = "say " + inputTextBox.Text;
+			string? str = inputTextBox.Text;
 			if (!string.IsNullOrEmpty(str))
 			{
 				ServerControlPanelForm.cmdInputTextBox.Text = "say " + str;
