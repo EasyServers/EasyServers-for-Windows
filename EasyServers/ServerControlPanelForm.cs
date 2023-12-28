@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using CoreRCON;
+using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -100,6 +102,7 @@ namespace EasyServers
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "メッセージ送信",
+				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
 			shortcutButton1.Click += new EventHandler(ShortcutButton1_Click);
@@ -192,12 +195,14 @@ namespace EasyServers
 				sDoneSwitch = true;
 				serverSendButton.Enabled = true;
 				serverStopButton.Enabled = true;
+				shortcutButton1.Enabled = true;
 			}
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
 				serverStopButton.Enabled = false;
+				shortcutButton1.Enabled = false;
 			}
 		}
 
@@ -408,7 +413,7 @@ namespace EasyServers
 			string? str = "say " + inputTextBox.Text;
 			if (!string.IsNullOrEmpty(str))
 			{
-				ServerControlPanelForm.cmdInputTextBox.Text = str;
+				ServerControlPanelForm.cmdInputTextBox.Text = "say " + str;
 				ServerControlPanelForm.serverSendTextVaild = true;
 				this.Close();
 			}
