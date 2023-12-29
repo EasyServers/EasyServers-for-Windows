@@ -138,6 +138,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton2.Click += new EventHandler(ShortcutButton2_Click);
 
 			shortcutButton3 = new Button()
 			{
@@ -150,6 +151,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton3.Click += new EventHandler(ShortcutButton3_Click);
 
 			shortcutButton4 = new Button()
 			{
@@ -226,8 +228,8 @@ namespace EasyServers
 			this.Controls.Add(serverStopButton);
 		}
 
-		private bool sDoneSwitch = false;
-		private bool sCloseSwitch = false;
+		public static bool sDoneSwitch = false;
+		public static bool sCloseSwitch = false;
 		private async void ServerStartButton_Click(object? sender, EventArgs e)
 		{
 			serverStartButton.Enabled = false;
@@ -280,6 +282,36 @@ namespace EasyServers
 		{
 			SayCommandShortForm form = new SayCommandShortForm();
 			form.Show(this);
+		}
+
+		private void ShortcutButton2_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ShortcutButton3_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ShortcutButton4_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ShortcutButton5_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ShortcutButton6_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ShortcutButton7_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
 		}
 
 		private async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
@@ -485,7 +517,7 @@ namespace EasyServers
 
 	partial class SayCommandShortForm : Form
 	{
-		public static Label label = new Label();
+		private static Label label = new Label();
 		private static Button sendButton = new Button();
 		private static TextBox inputTextBox = new TextBox();
 
@@ -537,13 +569,14 @@ namespace EasyServers
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Location = new Point(12, 9),
 				Name = "label1",
-				Text = "",
+				Text = "メッセージ送信ショートカット",
 				Size = new Size(63, 25),
 				TabIndex = 0,
 			};
 
 			this.Controls.Add(sendButton);
 			this.Controls.Add(inputTextBox);
+			this.Controls.Add(label);
 		}
 
 		private void InputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
@@ -580,11 +613,11 @@ namespace EasyServers
 
 		private void SendCommand(string str)
 		{
-			if (!string.IsNullOrEmpty(str))
+			if (!string.IsNullOrEmpty(str) && ServerControlPanelForm.sDoneSwitch)
 			{
 				ServerControlPanelForm.cmdInputTextBox.Text = "say " + str;
 				ServerControlPanelForm.serverSendTextVaild = true;
-				this.Close();
+				inputTextBox.Text = "";
 			}
 		}
 	}
