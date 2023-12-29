@@ -167,8 +167,6 @@ namespace EasyServers
 
 		private void ServerCreateButton_Click(object? sender, EventArgs e)
 		{
-			bool tmp_a = false;
-			MessageBox.Show($"{tmp_a}");
 			ServerControlPanelForm controlPanelForm = new ServerControlPanelForm();
 			controlPanelForm.Show();
 			this.Hide();
@@ -350,7 +348,7 @@ namespace EasyServers
 		private static string[] gamemode_str = ["survival", "creative", "adventure", "spectator"];
 		private static string[] difficulty_str = ["peaceful", "easy", "normal", "hard"];
 		private static string[] level_type_str = ["normal", "flat", "large_biome", "amplified", "single_biome_surface"];
-		private static async Task ServerPropertiesWrite(string savePath)
+		private static async Task ServerPropertiesWriteAsync(string savePath)
 		{
 			string[] properties = ["enable-jmx-monitoring", "rcon.port", "level-seed", "gamemode", "enable-command-block", "enable-query", "generator-settings", "enforce-secure-profile", "level-name", "motd", "query.port", "pvp", "generate-structures", "max-chained-neighbor-updates", "difficulty", "network-compression-threshold", "max-tick-time", "require-resource-pack", "use-native-transport", "max-players", "online-mode", "enable-status", "allow-flight", "initial-disabled-packs", "broadcast-rcon-to-ops", "view-distance", "server-ip", "resource-pack-prompt", "allow-nether", "server-port", "enable-rcon", "sync-chunk-writes", "op-permission-level", "prevent-proxy-connections", "hide-online-players", "resource-pack", "entity-broadcast-range-percentage", "simulation-distance", "rcon.password", "player-idle-timeout", "debug", "force-gamemode", "rate-limit", "hardcore", "white-list", "broadcast-console-to-ops", "spawn-npcs", "spawn-animals", "log-ips", "function-permission-level", "initial-enabled-packs", "level-type", "text-filtering-config", "spawn-monsters", "enforce-whitelist", "spawn-protection", "resource-pack-sha1", "max-world-size"];
 			bool enable_jmx_monitoring_prop = false;
@@ -467,10 +465,10 @@ namespace EasyServers
 				await writer.WriteLineAsync(properties[45] + $"={broadcast_console_to_ops_prop.ToString().ToLower()}");
 				await writer.WriteLineAsync(properties[46] + $"={spawn_npcs_prop.ToString().ToLower()}");
 				await writer.WriteLineAsync(properties[47] + $"={spawn_animals_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync(properties[48] + $"={function_permission_level_prop}");
-				await writer.WriteLineAsync(properties[49] + $"={initial_enabled_packs_prop}");
-				await writer.WriteLineAsync(properties[50] + $"={level_type_prop}");
-				await writer.WriteLineAsync(properties[51] + $"=true");//log-ips
+				await writer.WriteLineAsync(properties[48] + $"=true");//log-ips
+				await writer.WriteLineAsync(properties[49] + $"={function_permission_level_prop}");
+				await writer.WriteLineAsync(properties[50] + $"={initial_enabled_packs_prop}");
+				await writer.WriteLineAsync(properties[51] + $"={level_type_prop}");
 				await writer.WriteLineAsync(properties[52] + $"={text_filtering_config}");
 				await writer.WriteLineAsync(properties[53] + $"={spawn_monsters.ToString().ToLower()}");
 				await writer.WriteLineAsync(properties[54] + $"={enforce_whitelist_prop.ToString().ToLower()}");
