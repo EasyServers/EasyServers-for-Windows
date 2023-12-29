@@ -53,6 +53,22 @@ namespace EasyServers
 			}
 			return ToReadableSize(size / standard, scale + 1, standard);
 		}
+
+		public static async Task<bool> IsNet()
+		{
+			try
+			{
+				using (var client = new HttpClient())
+				using (await client.GetAsync(@"http://clients3.google.com/generate_204"))
+				{
+					return true;
+				}
+			}
+			catch
+			{
+				return false;
+			}
+		}
 	}
 
 	partial class JavaChecks
@@ -128,7 +144,6 @@ namespace EasyServers
 		public static ProgressBar progressBar = new ProgressBar();
 		public static Label processLabel = new Label();
 		public static Button cancelButton = new Button();
-		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
 		private static DriveInfo cDrive = new DriveInfo("C");
 
@@ -192,29 +207,16 @@ namespace EasyServers
 				Name = "Cancel",
 				Size = new Size(75, 23),
 				TabIndex = 2,
-				Enabled = false,
+				Enabled = true,
 				Text = "キャンセル",
 				UseVisualStyleBackColor = true
 			};
 			cancelButton.Click += new EventHandler(CancelButton_Click);
 			this.CancelButton = cancelButton;
 
-			timer = new System.Windows.Forms.Timer()
-			{
-				Interval = 250,
-				Enabled = true
-			};
-			timer.Tick += new EventHandler(Timer_Tick);
-			timer.Start();
-
 			this.Controls.Add(processLabel);
 			this.Controls.Add(progressBar);
 			this.Controls.Add(cancelButton);
-		}
-
-		private void Timer_Tick(object? sender, EventArgs e)
-		{
-			Task.Delay(100).Wait();
 		}
 
 		private static string? log_str = "";
@@ -225,39 +227,23 @@ namespace EasyServers
 		private static double freeDrive = cDrive.TotalFreeSpace;
 		private static double tortalDrive = cDrive.TotalSize;
 
-		public static async Task<bool> IsNet()
-		{
-			try
-			{
-				using (var client = new HttpClient())
-				using (await client.GetAsync(@"http://clients3.google.com/generate_204"))
-				{
-					return true;
-				}
-			}
-			catch
-			{
-				return false;
-			}
-		}
-
 		private async void JavaDownloadForm_Shown(object? sender, EventArgs e)
 		{
-			if (await IsNet())
+			if (await Program.IsNet())
 			{
 				net_ret_str += "Online.";
 
 				if (!JavaChecks.jdk8)
 				{
-					await JDK8_Install();
+					await JDK8InstallAsync();
 				}
 				if (!JavaChecks.jdk16)
 				{
-					await JDK16_Install();
+					await JDK16InstallAsync();
 				}
 				if (!JavaChecks.jdk17)
 				{
-					await JDK17_Install();
+					await JDK17InstallAsync();
 				}
 			}
 			else
@@ -315,7 +301,7 @@ namespace EasyServers
 			tokenSource.Cancel();
 		}
 
-		public static async Task JDK8_Install()
+		public static async Task JDK8InstallAsync()
 		{
 			try
 			{
@@ -346,7 +332,7 @@ namespace EasyServers
 						processLabel.Text = "ファイルの準備をしています...";
 						progressBar.Style = ProgressBarStyle.Marquee;
 						string tmpFilePath = Path.GetTempPath();
-						string installFolderPath = tmpFilePath + "ServerMCrafter";
+						string installFolderPath = tmpFilePath + Program.app_name;
 						if (!Directory.Exists(installFolderPath))
 						{
 							Directory.CreateDirectory(installFolderPath);
@@ -421,7 +407,7 @@ namespace EasyServers
 			}
 		}
 
-		public static async Task JDK16_Install()
+		public static async Task JDK16InstallAsync()
 		{
 			try
 			{
@@ -453,7 +439,7 @@ namespace EasyServers
 						processLabel.Text = "ファイルの準備をしています...";
 						progressBar.Style = ProgressBarStyle.Marquee;
 						string tmpFilePath = Path.GetTempPath();
-						string installFolderPath = tmpFilePath + "ServerMCrafter";
+						string installFolderPath = tmpFilePath + Program.app_name;
 						if (!Directory.Exists(installFolderPath))
 						{
 							Directory.CreateDirectory(installFolderPath);
@@ -530,7 +516,7 @@ namespace EasyServers
 			}
 		}
 
-		public static async Task JDK17_Install()
+		public static async Task JDK17InstallAsync()
 		{
 			try
 			{
@@ -561,7 +547,7 @@ namespace EasyServers
 						processLabel.Text = "ファイルの準備をしています...";
 						progressBar.Style = ProgressBarStyle.Marquee;
 						string tmpFilePath = Path.GetTempPath();
-						string installFolderPath = tmpFilePath + "ServerMCrafter";
+						string installFolderPath = tmpFilePath + Program.app_name;
 						if (!Directory.Exists(installFolderPath))
 						{
 							Directory.CreateDirectory(installFolderPath);
