@@ -116,7 +116,7 @@ namespace EasyServers
 			shortcutButton2 = new Button()
 			{
 				Location = new Point(471, 371),
-				Name = "SayShortCutButton",
+				Name = "W/TShortCutButton",
 				Size = new Size(45, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -128,7 +128,7 @@ namespace EasyServers
 			shortcutButton3 = new Button()
 			{
 				Location = new Point(542, 371),
-				Name = "SayShortCutButton",
+				Name = "OPShortCutButton",
 				Size = new Size(45, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -140,7 +140,7 @@ namespace EasyServers
 			shortcutButton4 = new Button()
 			{
 				Location = new Point(593, 371),
-				Name = "SayShortCutButton",
+				Name = "KillShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -152,7 +152,7 @@ namespace EasyServers
 			shortcutButton5 = new Button()
 			{
 				Location = new Point(643, 371),
-				Name = "SayShortCutButton",
+				Name = "TeleportShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -164,7 +164,7 @@ namespace EasyServers
 			shortcutButton6 = new Button()
 			{
 				Location = new Point(693, 371),
-				Name = "SayShortCutButton",
+				Name = "KickShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -176,7 +176,7 @@ namespace EasyServers
 			shortcutButton7 = new Button()
 			{
 				Location = new Point(743, 371),
-				Name = "SayShortCutButton",
+				Name = "BANShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -202,6 +202,12 @@ namespace EasyServers
 			this.Controls.Add(cmdInputTextBox);
 			this.Controls.Add(serverSendButton);
 			this.Controls.Add(shortcutButton1);
+			this.Controls.Add(shortcutButton2);
+			this.Controls.Add(shortcutButton3);
+			this.Controls.Add(shortcutButton4);
+			this.Controls.Add(shortcutButton5);
+			this.Controls.Add(shortcutButton6);
+			this.Controls.Add(shortcutButton7);
 			this.Controls.Add(serverStopButton);
 		}
 
@@ -274,6 +280,12 @@ namespace EasyServers
 				serverSendButton.Enabled = true;
 				serverStopButton.Enabled = true;
 				shortcutButton1.Enabled = true;
+				shortcutButton2.Enabled = true;
+				shortcutButton3.Enabled = true;
+				shortcutButton4.Enabled = true;
+				shortcutButton5.Enabled = true;
+				shortcutButton6.Enabled = true;
+				shortcutButton7.Enabled = true;
 			}
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
@@ -281,6 +293,12 @@ namespace EasyServers
 				serverSendButton.Enabled = false;
 				serverStopButton.Enabled = false;
 				shortcutButton1.Enabled = false;
+				shortcutButton2.Enabled = false;
+				shortcutButton3.Enabled = false;
+				shortcutButton4.Enabled = false;
+				shortcutButton5.Enabled = false;
+				shortcutButton6.Enabled = false;
+				shortcutButton7.Enabled = false;
 			}
 		}
 
