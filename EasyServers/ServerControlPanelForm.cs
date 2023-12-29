@@ -156,7 +156,7 @@ namespace EasyServers
 				{
 					if (proc != null && !proc.HasExited)
 					{
-						if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done \([0-9]+\.[0-9]{1,3}s\)\! For help, type ""help""", RegexOptions.Multiline) && !Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Stopping server", RegexOptions.Multiline))
+						if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done \([0-9]+\.[0-9]{1,3}s\)\! For help, type ""help""", RegexOptions.Multiline))
 						{
 							await proc.StandardInput.WriteLineAsync("stop");
 							proc.WaitForExit();
@@ -356,8 +356,10 @@ namespace EasyServers
 
 	partial class SayCommandShortForm : Form
 	{
+		public static Label label = new Label();
 		private static Button sendButton = new Button();
 		private static TextBox inputTextBox = new TextBox();
+
 		public SayCommandShortForm()
 		{
 			this.SuspendLayout();
@@ -384,6 +386,7 @@ namespace EasyServers
 				UseVisualStyleBackColor = true,
 			};
 			sendButton.Click += new EventHandler(SendButton_Click);
+			this.AcceptButton = sendButton;
 
 			inputTextBox = new TextBox()
 			{
@@ -395,14 +398,59 @@ namespace EasyServers
 				TabIndex = 1,
 				WordWrap = false
 			};
+			inputTextBox.KeyPress += new KeyPressEventHandler(InputTextBox_KeyPress);
+			inputTextBox.KeyDown += new KeyEventHandler(InputTextBox_KeyDown);
+
+			label = new Label
+			{
+				Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+				AutoSize = true,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Location = new Point(12, 9),
+				Name = "label1",
+				Text = "",
+				Size = new Size(63, 25),
+				TabIndex = 0,
+			};
 
 			this.Controls.Add(sendButton);
 			this.Controls.Add(inputTextBox);
 		}
 
+		private void InputTextBox_KeyPress(object? sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == (char)Keys.Enter)
+			{
+				e.Handled = true;
+			}
+			else
+			{
+				e.Handled = false;
+			}
+		}
+
+		private void InputTextBox_KeyDown(object? sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Enter:
+					string? str = inputTextBox.Text;
+					if (!string.IsNullOrEmpty(str))
+					{
+						SendCommand(str);
+					}
+					break;
+			}
+		}
+
 		private void SendButton_Click(object? sender, EventArgs e)
 		{
 			string? str = inputTextBox.Text;
+			SendCommand(str);
+		}
+
+		private void SendCommand(string str)
+		{
 			if (!string.IsNullOrEmpty(str))
 			{
 				ServerControlPanelForm.cmdInputTextBox.Text = "say " + str;
