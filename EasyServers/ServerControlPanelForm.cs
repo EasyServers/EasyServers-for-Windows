@@ -13,8 +13,14 @@ namespace EasyServers
 		private static TextBox cmdLogTextBox = new TextBox();
 		public static TextBox cmdInputTextBox = new TextBox();
 		private static Button serverSendButton = new Button();
-		private static Button shortcutButton1 = new Button();
 		private static Button serverStopButton = new Button();
+		private static Button shortcutButton1 = new Button();
+		private static Button shortcutButton2 = new Button();
+		private static Button shortcutButton3 = new Button();
+		private static Button shortcutButton4 = new Button();
+		private static Button shortcutButton5 = new Button();
+		private static Button shortcutButton6 = new Button();
+		private static Button shortcutButton7 = new Button();
 
 		private static Process proc = new Process();
 		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -106,6 +112,78 @@ namespace EasyServers
 				UseVisualStyleBackColor = true
 			};
 			shortcutButton1.Click += new EventHandler(ShortcutButton1_Click);
+
+			shortcutButton2 = new Button()
+			{
+				Location = new Point(471, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(45, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "時間/天気",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			shortcutButton3 = new Button()
+			{
+				Location = new Point(542, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(45, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "OP",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			shortcutButton4 = new Button()
+			{
+				Location = new Point(593, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(44, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "Kill",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			shortcutButton5 = new Button()
+			{
+				Location = new Point(643, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(44, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "TP",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			shortcutButton6 = new Button()
+			{
+				Location = new Point(693, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(44, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "Kick",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			shortcutButton7 = new Button()
+			{
+				Location = new Point(743, 371),
+				Name = "SayShortCutButton",
+				Size = new Size(44, 23),
+				TabIndex = 3,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "BAN",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
 
 			serverStopButton = new Button()
 			{
