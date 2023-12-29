@@ -261,7 +261,8 @@ namespace EasyServers
 			}
 			else
 			{
-				this.Close();
+				serverStartButton.Enabled = true;
+				ofd.Dispose();
 			}
 		}
 
