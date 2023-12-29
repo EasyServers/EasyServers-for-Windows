@@ -12,8 +12,10 @@ namespace EasyServers
 
 		private static TextBox cmdLogTextBox = new TextBox();
 		public static TextBox cmdInputTextBox = new TextBox();
+		private static Button serverStartButton = new Button();
 		private static Button serverSendButton = new Button();
 		private static Button serverStopButton = new Button();
+
 		private static Button shortcutButton1 = new Button();
 		private static Button shortcutButton2 = new Button();
 		private static Button shortcutButton3 = new Button();
@@ -43,7 +45,6 @@ namespace EasyServers
 			this.MaximizeBox = false;
 			this.ResumeLayout(false);
 
-			this.Shown += new EventHandler(ServerControlPanelForm_Shown);
 			this.FormClosing += new FormClosingEventHandler(ServerControlPanelForm_FormClosing);
 			this.FormClosed += new FormClosedEventHandler(ServerControlPanelForm_FormClosed);
 
@@ -60,7 +61,7 @@ namespace EasyServers
 				Location = new Point(373, 45),
 				ReadOnly = true,
 				BackColor = Color.White,
-				TabIndex = 0,
+				TabIndex = 1,
 				TabStop = false
 			};
 
@@ -74,18 +75,31 @@ namespace EasyServers
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Size = new Size(414, 23),
 				Location = new Point(373, 400),
-				TabIndex = 1,
+				TabIndex = 2,
 				TabStop = true
 			};
 			cmdInputTextBox.KeyPress += new KeyPressEventHandler(CmdInputTextBox_KeyPress);
 			cmdInputTextBox.KeyDown += new KeyEventHandler(CmdInputTextBox_KeyDown);
+
+			serverStartButton = new Button()
+			{
+				Location = new Point(768, 12),
+				Name = "ServerSendButton",
+				Size = new Size(100, 31),
+				TabIndex = 0,
+				Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 128),
+				Text = "サーバー起動",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+			serverStartButton.Click += new EventHandler(ServerStartButton_Click);
 
 			serverSendButton = new Button()
 			{
 				Location = new Point(793, 400),
 				Name = "ServerSendButton",
 				Size = new Size(75, 23),
-				TabIndex = 2,
+				TabIndex = 3,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "送信",
 				Enabled = false,
@@ -105,7 +119,7 @@ namespace EasyServers
 				Location = new Point(373, 371),
 				Name = "SayShortCutButton",
 				Size = new Size(92, 23),
-				TabIndex = 3,
+				TabIndex = 4,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "メッセージ送信",
 				Enabled = false,
@@ -118,7 +132,7 @@ namespace EasyServers
 				Location = new Point(471, 371),
 				Name = "W/TShortCutButton",
 				Size = new Size(45, 23),
-				TabIndex = 3,
+				TabIndex = 5,
 				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "時間/天気",
 				Enabled = false,
@@ -130,7 +144,7 @@ namespace EasyServers
 				Location = new Point(542, 371),
 				Name = "OPShortCutButton",
 				Size = new Size(45, 23),
-				TabIndex = 3,
+				TabIndex = 6,
 				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "OP",
 				Enabled = false,
@@ -142,7 +156,7 @@ namespace EasyServers
 				Location = new Point(593, 371),
 				Name = "KillShortCutButton",
 				Size = new Size(44, 23),
-				TabIndex = 3,
+				TabIndex = 7,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "Kill",
 				Enabled = false,
@@ -154,7 +168,7 @@ namespace EasyServers
 				Location = new Point(643, 371),
 				Name = "TeleportShortCutButton",
 				Size = new Size(44, 23),
-				TabIndex = 3,
+				TabIndex = 8,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "TP",
 				Enabled = false,
@@ -166,7 +180,7 @@ namespace EasyServers
 				Location = new Point(693, 371),
 				Name = "KickShortCutButton",
 				Size = new Size(44, 23),
-				TabIndex = 3,
+				TabIndex = 9,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "Kick",
 				Enabled = false,
@@ -178,7 +192,7 @@ namespace EasyServers
 				Location = new Point(743, 371),
 				Name = "BANShortCutButton",
 				Size = new Size(44, 23),
-				TabIndex = 3,
+				TabIndex = 10,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "BAN",
 				Enabled = false,
@@ -190,7 +204,7 @@ namespace EasyServers
 				Location = new Point(793, 371),
 				Name = "SayShortCutButton",
 				Size = new Size(75, 23),
-				TabIndex = 3,
+				TabIndex = 11,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "停止",
 				Enabled = false,
@@ -209,6 +223,36 @@ namespace EasyServers
 			this.Controls.Add(shortcutButton6);
 			this.Controls.Add(shortcutButton7);
 			this.Controls.Add(serverStopButton);
+		}
+
+		private async void ServerStartButton_Click(object? sender, EventArgs e)
+		{
+			ofd = new OpenFileDialog()
+			{
+				FileName = "",
+				InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments).ToString(),
+				Filter = "Java 実行ファイル(*.jar)|*.jar|All Files(*.*)|*.*",
+				FilterIndex = 1,
+				RestoreDirectory = true,
+				CheckFileExists = true,
+				CheckPathExists = true
+			};
+
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				try
+				{
+					await ExecuteCommandAsync(ofd.FileName, 4, 4);
+				}
+				catch (Exception ex)
+				{
+					cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer System Error]: " + ex.Message + "\r\n";
+				}
+			}
+			else
+			{
+				this.Close();
+			}
 		}
 
 		private void ServerStopButton_Click(object? sender, EventArgs e)
@@ -332,29 +376,6 @@ namespace EasyServers
 						serverSendTextVaild = true;
 					}
 					break;
-			}
-		}
-
-		private async void ServerControlPanelForm_Shown(object? sender, EventArgs e)
-		{
-			ofd = new OpenFileDialog()
-			{
-				FileName = "",
-				InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments).ToString(),
-				Filter = "Java 実行ファイル(*.jar)|*.jar|All Files(*.*)|*.*",
-				FilterIndex = 1,
-				RestoreDirectory = true,
-				CheckFileExists = true,
-				CheckPathExists = true
-			};
-
-			if (ofd.ShowDialog() == DialogResult.OK)
-			{
-				await ExecuteCommandAsync(ofd.FileName, 4, 4);
-			}
-			else
-			{
-				this.Close();
 			}
 		}
 
