@@ -83,13 +83,13 @@ namespace EasyServers
 
 			serverStartButton = new Button()
 			{
-				Location = new Point(768, 12),
+				Location = new Point(768, 6),
 				Name = "ServerSendButton",
 				Size = new Size(100, 31),
 				TabIndex = 0,
 				Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 128),
 				Text = "サーバー起動",
-				Enabled = false,
+				Enabled = true,
 				UseVisualStyleBackColor = true
 			};
 			serverStartButton.Click += new EventHandler(ServerStartButton_Click);
@@ -131,7 +131,7 @@ namespace EasyServers
 			{
 				Location = new Point(471, 371),
 				Name = "W/TShortCutButton",
-				Size = new Size(45, 23),
+				Size = new Size(66, 23),
 				TabIndex = 5,
 				Font = new Font("Yu Gothic UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "時間/天気",
@@ -214,6 +214,7 @@ namespace EasyServers
 
 			this.Controls.Add(cmdLogTextBox);
 			this.Controls.Add(cmdInputTextBox);
+			this.Controls.Add(serverStartButton);
 			this.Controls.Add(serverSendButton);
 			this.Controls.Add(shortcutButton1);
 			this.Controls.Add(shortcutButton2);
@@ -225,8 +226,11 @@ namespace EasyServers
 			this.Controls.Add(serverStopButton);
 		}
 
+		private bool sDoneSwitch = false;
+		private bool sCloseSwitch = false;
 		private async void ServerStartButton_Click(object? sender, EventArgs e)
 		{
+			serverStartButton.Enabled = false;
 			ofd = new OpenFileDialog()
 			{
 				FileName = "",
@@ -242,10 +246,16 @@ namespace EasyServers
 			{
 				try
 				{
+					cmdLogTextBox.Text = "";
+					sDoneSwitch = false;
+					sCloseSwitch = false;
 					await ExecuteCommandAsync(ofd.FileName, 4, 4);
 				}
 				catch (Exception ex)
 				{
+					cmdLogTextBox.Text = "";
+					sDoneSwitch = false;
+					sCloseSwitch = false;
 					cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer System Error]: " + ex.Message + "\r\n";
 				}
 			}
@@ -271,12 +281,12 @@ namespace EasyServers
 			form.Show(this);
 		}
 
-		private static async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
+		private async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
 		{
 			await FromClosing_Task();
 		}
 
-		private static async Task FromClosing_Task()
+		private async Task FromClosing_Task()
 		{
 			try
 			{
@@ -304,8 +314,10 @@ namespace EasyServers
 						proc.Close();
 					}
 				}
-				Application.Exit();
 			}
+			cmdLogTextBox.Text = "";
+			sDoneSwitch = false;
+			sCloseSwitch = false;
 		}
 
 		private void ServerControlPanelForm_FormClosed(object? sender, FormClosedEventArgs e)
@@ -314,8 +326,6 @@ namespace EasyServers
 			mfm.Show();
 		}
 
-		private bool sDoneSwitch = false;
-		private bool sCloseSwitch = false;
 		private void Timer_Tick(object? sender, EventArgs e)
 		{
 			if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Done \([0-9]+\.[0-9]{1,3}s\)\! For help, type ""help""", RegexOptions.Multiline) && !sDoneSwitch)
@@ -334,6 +344,7 @@ namespace EasyServers
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
+				serverStartButton.Enabled = true;
 				serverSendButton.Enabled = false;
 				serverStopButton.Enabled = false;
 				shortcutButton1.Enabled = false;
