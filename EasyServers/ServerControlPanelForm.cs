@@ -52,10 +52,10 @@ namespace EasyServers
 			{
 				Name = "cmdLog",
 				Text = "",
-				PlaceholderText = "console",
+				//PlaceholderText = "console",
 				WordWrap = true,
 				Multiline = true,
-				ScrollBars = ScrollBars.Both,
+				ScrollBars = ScrollBars.Vertical,
 				BorderStyle = BorderStyle.FixedSingle,
 				Font = new Font("Yu Gothic UI", 10.75F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Size = new Size(495, 320),
