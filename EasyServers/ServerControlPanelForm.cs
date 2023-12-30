@@ -52,6 +52,7 @@ namespace EasyServers
 			{
 				Name = "cmdLog",
 				Text = "",
+				PlaceholderText = "console",
 				WordWrap = true,
 				Multiline = true,
 				ScrollBars = ScrollBars.Both,
