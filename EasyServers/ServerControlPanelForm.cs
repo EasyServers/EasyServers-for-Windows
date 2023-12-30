@@ -422,10 +422,8 @@ namespace EasyServers
 			switch (e.KeyCode)
 			{
 				case Keys.Enter:
-					if (!string.IsNullOrEmpty(cmdInputTextBox.Text))
-					{
+					if (!string.IsNullOrEmpty(cmdInputTextBox.Text) && sDoneSwitch)
 						serverSendTextVaild = true;
-					}
 					break;
 			}
 		}
@@ -456,9 +454,7 @@ namespace EasyServers
 					{
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
 						if (proc.HasExited)
-						{
 							serverStartButton.Enabled = true;
-						}
 					});
 				}
 			}
@@ -512,10 +508,6 @@ namespace EasyServers
 								try
 								{
 									await sinput.WriteLineAsync(command);
-								}
-								catch (Exception ex)
-								{
-									cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Input Error]: " + ex.Message + "\r\n";
 								}
 								finally
 								{

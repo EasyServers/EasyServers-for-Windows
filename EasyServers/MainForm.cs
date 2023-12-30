@@ -320,7 +320,7 @@ namespace EasyServers
 			serverCreateScreen_EULA.Visible = false;
 			serverCreateScreen_EULA.Enabled = false;
 
-			ServerControlPanelForm fm = new ServerControlPanelForm();
+			ServerSoftwearDownloadForm fm = new ServerSoftwearDownloadForm();
 			fm.Show();
 			this.Hide();
 		}
@@ -521,9 +521,10 @@ namespace EasyServers
 						}
 						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.sh", false, System.Text.Encoding.UTF8))
 						{
-							installFolderPath = installFolderPath.Replace(@"\", @"\\");
+							string str = $"java -Xms4G -Xmx4G -jar \"{installFolderPath}{fileName}\" nogui";
+							str = str.Replace(@"\", @"\\");
 							await writer.WriteLineAsync("#!/bin/sh");
-							await writer.WriteLineAsync($"java -Xms4G -Xmx4G -jar \"{installFolderPath}\\{fileName}\" nogui");
+							await writer.WriteLineAsync(str);
 						}
 						processLabel.Text = "後処理をしています...";
 						sucsessDownloadServerLap = true;
@@ -538,7 +539,7 @@ namespace EasyServers
 			catch (Exception ex)
 			{
 				TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error);
-				MessageBox.Show("ダウンロード中にエラーが発生しました！\r\n" + ex.Message);
+				MessageBox.Show("ダウンロード中にエラーが発生しました！\r\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Application.Exit();
 			}
 		}
@@ -608,6 +609,7 @@ namespace EasyServers
 
 			using (StreamWriter writer = new StreamWriter($"{savePath}\\" + @"server.properties", false, System.Text.Encoding.UTF8))
 			{
+				await writer.WriteLineAsync("#Minecraft server properties");
 				await writer.WriteLineAsync($"{properties[0]}={enable_jmx_monitoring_prop.ToString().ToLower()}");
 				await writer.WriteLineAsync($"{properties[1]}={rconPort_prop}");
 				await writer.WriteLineAsync($"{properties[2]}={(string.IsNullOrEmpty(level_seed_prop) ? "" : level_seed_prop)}");
