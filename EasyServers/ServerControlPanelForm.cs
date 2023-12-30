@@ -181,11 +181,11 @@ namespace EasyServers
 			shortcutButton6 = new Button()
 			{
 				Location = new Point(693, 371),
-				Name = "KickShortCutButton",
+				Name = "GamemodeShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 9,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "Kick",
+				Text = "GM",
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
@@ -193,7 +193,7 @@ namespace EasyServers
 			shortcutButton7 = new Button()
 			{
 				Location = new Point(743, 371),
-				Name = "BANShortCutButton",
+				Name = "BANandKickShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 10,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
