@@ -71,21 +71,6 @@ namespace EasyServers.Properties {
         }
         
         /// <summary>
-        ///   MINECRAFT END(ER)-USER LICENSE AGREEMENT (“EULA”)
-        ///
-        ///SUMMARY
-        ///This EULA is a legal agreement between you and us (Mojang AB and Microsoft Corporation, or, if applicable, one of its local affiliates listed in the Company Information section below). You should read the whole thing but here is a quick summary of some important points to help guide you - the full terms and conditions still apply though.
-        ///
-        ///This Minecraft EULA and the Microsoft Services Agreement, together, apply to all Minecraft services.
-        ///Your  [残りの文字列は切り詰められました]&quot;; に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string MinecraftEULA {
-            get {
-                return ResourceManager.GetString("MinecraftEULA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         public static System.Drawing.Bitmap MinecraftLogo {

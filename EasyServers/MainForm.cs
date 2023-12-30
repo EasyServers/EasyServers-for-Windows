@@ -18,19 +18,20 @@ namespace EasyServers
 		private static Button undoButton1 = new Button();
 
 		private static RadioButton eulaYesButton = new RadioButton();
-		private static RadioButton eulaNoButton = new RadioButton();
 
-		private static TextBox eulaTextBox = new TextBox();
+		private static TextBox serverCreateNameTextBox = new TextBox();
 
 		private static Label versionLabel = new Label();
 		private static Label copyrightLabel = new Label();
 		private static Label eulaLabel1 = new Label();
 		private static Label eulaLabel2 = new Label();
+		private static Label serverNameLabel = new Label();
 		private static LinkLabel jumpEULALabel = new LinkLabel();
 
 		private static Panel mainMenuPanel = new Panel();
 		private static Panel serverCreateScreen_Software = new Panel();
-		private static Panel serverCreateScreen_EULA = new Panel();
+		private static Panel serverCreateScreen_VERFIY = new Panel();
+		private static Panel serverCreatePanel_EULA = new Panel();
 		private static Panel serverOperationScreen = new Panel();
 
 		public static bool mcEULA = false;
@@ -181,9 +182,9 @@ namespace EasyServers
 				TabIndex = 8
 			};
 
-			serverCreateScreen_EULA = new Panel()
+			serverCreateScreen_VERFIY = new Panel()
 			{
-				Name = "ServerCreateScreen_EULA",
+				Name = "serverCreateScreen_VERFIY",
 				Dock = DockStyle.Fill,
 				AutoSize = true,
 				Location = new Point(0, 0),
@@ -193,20 +194,26 @@ namespace EasyServers
 				TabIndex = 9
 			};
 
-			eulaTextBox = new TextBox()
+			serverCreatePanel_EULA = new Panel()
 			{
-				Name = "eulaTextBox",
-				Text = Properties.Resources.MinecraftEULA.ToString(),
-				WordWrap = true,
-				Multiline = true,
-				ScrollBars = ScrollBars.Both,
-				BorderStyle = BorderStyle.FixedSingle,
-				Font = new Font("Yu Gothic UI", 10.75F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Size = new Size(856, 337),
-				Location = new Point(12, 59),
-				ReadOnly = true,
+				Name = "serverCreatePanel_EULA",
+				Location = new Point(12, 12),
+				Size = new Size(856, 153),
 				BackColor = Color.White,
-				TabIndex = 10,
+				BorderStyle = BorderStyle.FixedSingle,
+				TabIndex = 10
+			};
+
+			serverCreateNameTextBox = new TextBox()
+			{
+				Name = "serverCreateNameTextBox",
+				Text = "無題のサーバー",
+				BorderStyle = BorderStyle.FixedSingle,
+				Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Size = new Size(271, 29),
+				Location = new Point(12, 201),
+				BackColor = Color.White,
+				TabIndex = 11,
 				TabStop = false
 			};
 
@@ -216,63 +223,63 @@ namespace EasyServers
 				Font = new Font("Yu Gothic UI", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 128),
 				Text = "Minecraft EULA",
 				AutoSize = true,
-				Location = new Point(12, 9),
-				TabIndex = 11
+				Location = new Point(3, 10),
+				TabIndex = 12
 			};
 
 			eulaLabel2 = new Label()
 			{
 				Name = "label4",
-				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "ここに書かれているELUAは最新では無い可能性があります。次のURLから最新のELUAをチェックして下さい。",
+				Font = new Font("Yu Gothic UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "Minecraftのサーバーを使用するにはエンドユーザーライセンス(以下EULA)への同意が必須です。\r\n下のリンクからEULAをよく読み、同意する場合は下のボタンを押してサーバーの作成を開始させてください。",
 				AutoSize = true,
-				Location = new Point(12, 399),
-				TabIndex = 12
+				Location = new Point(3, 57),
+				TabIndex = 13
+			};
+
+			serverNameLabel = new Label()
+			{
+				Name = "label6",
+				Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "サーバー名",
+				AutoSize = true,
+				Location = new Point(12, 177),
+				TabIndex = 19
 			};
 
 			jumpEULALabel = new LinkLabel()
 			{
 				Name = "label5",
-				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Font = new Font("Yu Gothic UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = @"https://www.minecraft.net/eula",
 				AutoSize = true,
 				TabStop = false,
-				Location = new Point(12, 414),
-				TabIndex = 13
+				Location = new Point(3, 116),
+				TabIndex = 14
 			};
 			jumpEULALabel.Click += new EventHandler(JumpEULALabel_Click);
 
 			eulaYesButton = new RadioButton()
 			{
 				AutoSize = true,
-				Location = new Point(619, 402),
+				Location = new Point(12, 236),
+				BackColor = Color.Transparent,
+				Font = new Font("Yu Gothic UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Name = "eulaYesButton",
-				TabIndex = 14,
+				TabIndex = 15,
 				TabStop = true,
-				Text = "はい。同意します。",
+				Text = "EULAに同意",
 				UseVisualStyleBackColor = true
 			};
 			eulaYesButton.Click += new EventHandler(EulaYesButton_Click);
 
-			eulaNoButton = new RadioButton()
-			{
-				AutoSize = true,
-				Location = new Point(737, 402),
-				Name = "eulaNoButton",
-				TabIndex = 15,
-				TabStop = true,
-				Text = "いいえ。同意しません。",
-				UseVisualStyleBackColor = true
-			};
-			eulaNoButton.Click += new EventHandler(EulaNoButton_Click);
-
 			nextButton1 = new Button()
 			{
 				Name = "nextButton1",
-				Text = "次へ",
+				Text = "作成",
 				Size = new Size(75, 23),
 				Location = new Point(793, 430),
-				Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				UseVisualStyleBackColor = true,
 				Enabled = false,
 				TabStop = false,
@@ -286,21 +293,22 @@ namespace EasyServers
 				Text = "戻る",
 				Size = new Size(75, 23),
 				Location = new Point(712, 430),
-				Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				UseVisualStyleBackColor = true,
 				TabStop = false,
 				TabIndex = 17
 			};
 			undoButton1.Click += new EventHandler(UndoButton1_Click);
 
-			serverCreateScreen_EULA.Controls.Add(eulaTextBox);
-			serverCreateScreen_EULA.Controls.Add(eulaLabel1);
-			serverCreateScreen_EULA.Controls.Add(eulaLabel2);
-			serverCreateScreen_EULA.Controls.Add(jumpEULALabel);
-			serverCreateScreen_EULA.Controls.Add(eulaYesButton);
-			serverCreateScreen_EULA.Controls.Add(eulaNoButton);
-			serverCreateScreen_EULA.Controls.Add(nextButton1);
-			serverCreateScreen_EULA.Controls.Add(undoButton1);
+			serverCreatePanel_EULA.Controls.Add(eulaLabel1);
+			serverCreatePanel_EULA.Controls.Add(eulaLabel2);
+			serverCreatePanel_EULA.Controls.Add(jumpEULALabel);
+			serverCreateScreen_VERFIY.Controls.Add(serverCreatePanel_EULA);
+			serverCreateScreen_VERFIY.Controls.Add(serverCreateNameTextBox);
+			serverCreateScreen_VERFIY.Controls.Add(serverNameLabel);
+			serverCreateScreen_VERFIY.Controls.Add(eulaYesButton);
+			serverCreateScreen_VERFIY.Controls.Add(nextButton1);
+			serverCreateScreen_VERFIY.Controls.Add(undoButton1);
 
 			serverOperationScreen = new Panel()
 			{
@@ -311,13 +319,13 @@ namespace EasyServers
 				BorderStyle = BorderStyle.None,
 				Enabled = false,
 				Visible = false,
-				TabIndex = 9
+				TabIndex = 18
 			};
 
 			this.Controls.Add(mainMenuPanel);
 			this.Controls.Add(serverOperationScreen);
 			this.Controls.Add(serverCreateScreen_Software);
-			this.Controls.Add(serverCreateScreen_EULA);
+			this.Controls.Add(serverCreateScreen_VERFIY);
 		}
 
 		private void ServerOperationButton_Click(object? sender, EventArgs e)
@@ -338,8 +346,8 @@ namespace EasyServers
 			mcEULA = true;
 			mainMenuPanel.Enabled = true;
 			mainMenuPanel.Visible = true;
-			serverCreateScreen_EULA.Visible = false;
-			serverCreateScreen_EULA.Enabled = false;
+			serverCreateScreen_VERFIY.Visible = false;
+			serverCreateScreen_VERFIY.Enabled = false;
 
 			ServerSoftwearDownloadForm fm = new ServerSoftwearDownloadForm();
 			fm.Show();
@@ -350,8 +358,8 @@ namespace EasyServers
 		{
 			mainMenuPanel.Enabled = true;
 			mainMenuPanel.Visible = true;
-			serverCreateScreen_EULA.Visible = false;
-			serverCreateScreen_EULA.Enabled = false;
+			serverCreateScreen_VERFIY.Visible = false;
+			serverCreateScreen_VERFIY.Enabled = false;
 		}
 
 		private void EulaNoButton_Click(object? sender, EventArgs e)
@@ -379,8 +387,8 @@ namespace EasyServers
 		{
 			mainMenuPanel.Enabled = false;
 			mainMenuPanel.Visible = false;
-			serverCreateScreen_EULA.Visible = true;
-			serverCreateScreen_EULA.Enabled = true;
+			serverCreateScreen_VERFIY.Visible = true;
+			serverCreateScreen_VERFIY.Enabled = true;
 		}
 
 		private void ExitButton_Click(object? sender, EventArgs e)
@@ -639,6 +647,7 @@ namespace EasyServers
 			using (StreamWriter writer = new StreamWriter($"{savePath}\\" + @"server.properties", false, System.Text.Encoding.UTF8))
 			{
 				await writer.WriteLineAsync("#Minecraft server properties");
+				await writer.WriteLineAsync("#Sat Dec 30 15:55:19 JST 2023");
 				await writer.WriteLineAsync($"{properties[0]}={enable_jmx_monitoring_prop.ToString().ToLower()}");
 				await writer.WriteLineAsync($"{properties[1]}={rconPort_prop}");
 				await writer.WriteLineAsync($"{properties[2]}={(string.IsNullOrEmpty(level_seed_prop) ? "" : level_seed_prop)}");
