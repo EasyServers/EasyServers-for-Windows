@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Diagnostics;
 
 namespace EasyServers
 {
@@ -12,10 +13,14 @@ namespace EasyServers
 		private static Button serverOperationButton = new Button();
 		private static Button portOpenFormButton = new Button();
 		private static Button exitButton = new Button();
+
 		private static TextBox eulaTextBox = new TextBox();
 
 		private static Label versionLabel = new Label();
 		private static Label copyrightLabel = new Label();
+		private static Label eulaLabel1 = new Label();
+		private static Label eulaLabel2 = new Label();
+		private static LinkLabel jumpEULALabel = new LinkLabel();
 
 		private static Panel serverCreateScreen_Software = new Panel();
 		private static Panel serverCreateScreen_EULA = new Panel();
@@ -117,6 +122,7 @@ namespace EasyServers
 				Text = "v" + Program.app_version,
 				AutoSize = true,
 				Location = new Point(12, 432),
+				BackColor = Color.Transparent,
 				TabIndex = 6
 			};
 
@@ -124,9 +130,10 @@ namespace EasyServers
 			{
 				Name = "Version",
 				Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "(C) 2023 Shotadft. All rights reserved. (EasyServers)\r\n(C) 2011-2023 Mojang AB. (Minecraft)",
+				Text = $"(C) 2024 Shotadft. All rights reserved. ({Program.app_name})\r\n(C) 2011-2024 Mojang AB. (Minecraft)",
 				AutoSize = true,
 				Location = new Point(512, 413),
+				BackColor = Color.Transparent,
 				TabIndex = 7
 			};
 
@@ -188,22 +195,69 @@ namespace EasyServers
 				Location = new Point(12, 59),
 				ReadOnly = true,
 				BackColor = Color.White,
-				TabIndex = 1,
+				TabIndex = 10,
 				TabStop = false
 			};
+
+			eulaLabel1 = new Label()
+			{
+				Name = "label3",
+				Font = new Font("Yu Gothic UI", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 128),
+				Text = "Minecraft EULA",
+				AutoSize = true,
+				Location = new Point(12, 9),
+				TabIndex = 11
+			};
+
+			eulaLabel2 = new Label()
+			{
+				Name = "label4",
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "ここに書かれているELUAは最新では無い可能性があります。次のURLから最新のELUAをチェックして下さい。",
+				AutoSize = true,
+				Location = new Point(12, 399),
+				TabIndex = 12
+			};
+
+			jumpEULALabel = new LinkLabel()
+			{
+				Name = "label5",
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = @"https://www.minecraft.net/eula",
+				AutoSize = true,
+				TabStop = false,
+				Location = new Point(12, 414),
+				TabIndex = 13
+			};
+			jumpEULALabel.Click += new EventHandler(JumpEULALabel_Click);
+
 			serverCreateScreen_EULA.Controls.Add(eulaTextBox);
+			serverCreateScreen_EULA.Controls.Add(eulaLabel1);
+			serverCreateScreen_EULA.Controls.Add(eulaLabel2);
+			serverCreateScreen_EULA.Controls.Add(jumpEULALabel);
 
 			this.Controls.Add(mainMenuPanel);
 			this.Controls.Add(serverCreateScreen_Software);
 			this.Controls.Add(serverCreateScreen_EULA);
 		}
 
+		private void JumpEULALabel_Click(object? sender, EventArgs e)
+		{
+			using (Process proc = new Process())
+			{
+				Uri uri = new Uri(@"https://www.minecraft.net/eula");
+				proc.StartInfo.FileName = uri.ToString();
+				proc.StartInfo.UseShellExecute = true;
+				proc.Start();
+			}
+		}
+
 		private void ServerCreateButton_Click(object? sender, EventArgs e)
 		{
 			mainMenuPanel.Enabled = false;
 			mainMenuPanel.Visible = false;
-			serverCreateScreen_Software.Visible = true;
-			serverCreateScreen_Software.Enabled = true;
+			serverCreateScreen_EULA.Visible = true;
+			serverCreateScreen_EULA.Enabled = true;
 		}
 
 		private void ExitButton_Click(object? sender, EventArgs e)
@@ -246,6 +300,7 @@ namespace EasyServers
 				Location = new Point(12, 9),
 				Name = "ProcessLabel",
 				Text = "",
+				BackColor = Color.Transparent,
 				Size = new Size(63, 25),
 				TabIndex = 0,
 			};
