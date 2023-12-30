@@ -506,9 +506,14 @@ namespace EasyServers
 
 					await Task.Run(async () =>
 					{
+						serverAdvStopButton.Enabled = true;
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
 						if (proc.HasExited)
+						{
 							serverStartButton.Enabled = true;
+							serverAdvStopButton.Enabled = false;
+							serverStopButton.Enabled = false;
+						}
 					});
 				}
 			}
