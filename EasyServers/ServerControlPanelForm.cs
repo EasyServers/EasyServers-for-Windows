@@ -514,9 +514,18 @@ namespace EasyServers
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
 						if (proc.HasExited)
 						{
+							sCloseSwitch = true;
 							serverStartButton.Enabled = true;
-							serverAdvStopButton.Enabled = false;
+							serverSendButton.Enabled = false;
 							serverStopButton.Enabled = false;
+							serverAdvStopButton.Enabled = false;
+							shortcutButton1.Enabled = false;
+							shortcutButton2.Enabled = false;
+							shortcutButton3.Enabled = false;
+							shortcutButton4.Enabled = false;
+							shortcutButton5.Enabled = false;
+							shortcutButton6.Enabled = false;
+							shortcutButton7.Enabled = false;
 						}
 					});
 				}
