@@ -22,7 +22,7 @@ namespace EasyServers.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace EasyServers.Properties {
         ///   このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasyServers.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace EasyServers.Properties {
         ///   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace EasyServers.Properties {
         /// <summary>
         ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Icon icon {
+        public static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -71,9 +71,24 @@ namespace EasyServers.Properties {
         }
         
         /// <summary>
+        ///   MINECRAFT END(ER)-USER LICENSE AGREEMENT (“EULA”)
+        ///
+        ///SUMMARY
+        ///This EULA is a legal agreement between you and us (Mojang AB and Microsoft Corporation, or, if applicable, one of its local affiliates listed in the Company Information section below). You should read the whole thing but here is a quick summary of some important points to help guide you - the full terms and conditions still apply though.
+        ///
+        ///This Minecraft EULA and the Microsoft Services Agreement, together, apply to all Minecraft services.
+        ///Your  [残りの文字列は切り詰められました]&quot;; に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string MinecraftEULA {
+            get {
+                return ResourceManager.GetString("MinecraftEULA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap MinecraftLogo {
+        public static System.Drawing.Bitmap MinecraftLogo {
             get {
                 object obj = ResourceManager.GetObject("MinecraftLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +98,7 @@ namespace EasyServers.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap paperMC {
+        public static System.Drawing.Bitmap paperMC {
             get {
                 object obj = ResourceManager.GetObject("paperMC", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +108,7 @@ namespace EasyServers.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap spigot {
+        public static System.Drawing.Bitmap spigot {
             get {
                 object obj = ResourceManager.GetObject("spigot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +118,7 @@ namespace EasyServers.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
-        internal static System.Drawing.Bitmap title {
+        public static System.Drawing.Bitmap title {
             get {
                 object obj = ResourceManager.GetObject("title", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

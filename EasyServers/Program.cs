@@ -263,7 +263,7 @@ namespace EasyServers
 		{
 			try
 			{
-				using (StreamWriter sw = new StreamWriter("java_install.log", true))
+				using (StreamWriter sw = new StreamWriter("java_install.log", true, System.Text.Encoding.UTF8))
 				{
 					if (JavaChecks.jdk8_i)
 					{

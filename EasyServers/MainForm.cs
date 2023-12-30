@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
@@ -13,11 +12,13 @@ namespace EasyServers
 		private static Button serverOperationButton = new Button();
 		private static Button portOpenFormButton = new Button();
 		private static Button exitButton = new Button();
+		private static TextBox eulaTextBox = new TextBox();
 
 		private static Label versionLabel = new Label();
 		private static Label copyrightLabel = new Label();
 
 		private static Panel serverCreateScreen_Software = new Panel();
+		private static Panel serverCreateScreen_EULA = new Panel();
 
 		private IContainer? components = null;
 
@@ -162,20 +163,47 @@ namespace EasyServers
 				TabIndex = 8
 			};
 
+			serverCreateScreen_EULA = new Panel()
+			{
+				Name = "ServerCreateScreen_EULA",
+				Dock = DockStyle.Fill,
+				AutoSize = true,
+				Location = new Point(0, 0),
+				BorderStyle = BorderStyle.None,
+				Enabled = false,
+				Visible = false,
+				TabIndex = 9
+			};
+
+			eulaTextBox = new TextBox()
+			{
+				Name = "eulaTextBox",
+				Text = Properties.Resources.MinecraftEULA.ToString(),
+				WordWrap = true,
+				Multiline = true,
+				ScrollBars = ScrollBars.Both,
+				BorderStyle = BorderStyle.FixedSingle,
+				Font = new Font("Yu Gothic UI", 10.75F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Size = new Size(856, 337),
+				Location = new Point(12, 59),
+				ReadOnly = true,
+				BackColor = Color.White,
+				TabIndex = 1,
+				TabStop = false
+			};
+			serverCreateScreen_EULA.Controls.Add(eulaTextBox);
+
 			this.Controls.Add(mainMenuPanel);
+			this.Controls.Add(serverCreateScreen_Software);
+			this.Controls.Add(serverCreateScreen_EULA);
 		}
 
 		private void ServerCreateButton_Click(object? sender, EventArgs e)
 		{
-			ServerSoftwearDownloadForm fm = new ServerSoftwearDownloadForm();
-			fm.Show();
-			this.Hide();
-			/*
 			mainMenuPanel.Enabled = false;
 			mainMenuPanel.Visible = false;
 			serverCreateScreen_Software.Visible = true;
 			serverCreateScreen_Software.Enabled = true;
-			*/
 		}
 
 		private void ExitButton_Click(object? sender, EventArgs e)
@@ -264,6 +292,7 @@ namespace EasyServers
 				await ServerCreateProcessAsync();
 				if (sucsessDownloadServerLap)
 				{
+					processLabel.Text = "完了";
 					ServerControlPanelForm controlPanelForm = new ServerControlPanelForm();
 					controlPanelForm.Show();
 					this.Close();
@@ -335,6 +364,18 @@ namespace EasyServers
 						File.Move(installFolderPath + tmpFileName, installFolderPath + fileName);
 						processLabel.Text = "server.propertiesを書き込んでいます...";
 						await ServerPropertiesWriteAsync($"{Path.GetDirectoryName(installFolderPath)}");
+						processLabel.Text = "起動用ファイルを書き込んでいます...";
+						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.bat", false, System.Text.Encoding.UTF8))
+						{
+							await writer.WriteLineAsync("@echo off");
+							await writer.WriteLineAsync($"java -Xms4G -Xmx4G -jar \"{Path.GetDirectoryName(installFolderPath)}\\{fileName}\" nogui");
+						}
+						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.sh", false, System.Text.Encoding.UTF8))
+						{
+							installFolderPath = installFolderPath.Replace(@"\", @"\\");
+							await writer.WriteLineAsync("#!/bin/sh");
+							await writer.WriteLineAsync($"java -Xms4G -Xmx4G -jar \"{installFolderPath}\\{fileName}\" nogui");
+						}
 						processLabel.Text = "後処理をしています...";
 						sucsessDownloadServerLap = true;
 						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);

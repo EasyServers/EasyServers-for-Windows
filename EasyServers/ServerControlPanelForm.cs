@@ -377,7 +377,6 @@ namespace EasyServers
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
 				sCloseSwitch = true;
-				serverStartButton.Enabled = true;
 				serverSendButton.Enabled = false;
 				serverStopButton.Enabled = false;
 				shortcutButton1.Enabled = false;
@@ -449,6 +448,11 @@ namespace EasyServers
 					{
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
 					});
+
+					if (proc.HasExited)
+					{
+						serverStartButton.Enabled = true;
+					}
 				}
 			}
 			catch (Exception ex)
