@@ -251,6 +251,14 @@ namespace EasyServers
 					cmdLogTextBox.Text = "";
 					sDoneSwitch = false;
 					sCloseSwitch = false;
+					if (MainForm.mcEULA)
+					{
+						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(ofd.FileName)}\\eula.txt", false, System.Text.Encoding.UTF8))
+						{
+							writer.WriteLine(@"#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).");
+							writer.WriteLine($"eula={MainForm.mcEULA.ToString().ToLower()}");
+						}
+					}
 					await ExecuteCommandAsync(ofd.FileName, 4, 4);
 				}
 				catch (Exception ex)
@@ -447,12 +455,11 @@ namespace EasyServers
 					await Task.Run(async () =>
 					{
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
+						if (proc.HasExited)
+						{
+							serverStartButton.Enabled = true;
+						}
 					});
-
-					if (proc.HasExited)
-					{
-						serverStartButton.Enabled = true;
-					}
 				}
 			}
 			catch (Exception ex)
@@ -502,10 +509,20 @@ namespace EasyServers
 							string? command = cmdInputTextBox.Text;
 							if (!string.IsNullOrEmpty(command) && serverSendTextVaild)
 							{
-								serverSendTextVaild = false;
-								await sinput.WriteLineAsync(command);
-								command = "";
-								cmdInputTextBox.Text = "";
+								try
+								{
+									await sinput.WriteLineAsync(command);
+								}
+								catch (Exception ex)
+								{
+									cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Input Error]: " + ex.Message + "\r\n";
+								}
+								finally
+								{
+									serverSendTextVaild = false;
+									command = "";
+									cmdInputTextBox.Text = "";
+								}
 							}
 						}
 					}
@@ -513,7 +530,8 @@ namespace EasyServers
 				catch (Exception ex)
 				{
 					cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Input Error]: " + ex.Message + "\r\n";
-					serverSendTextVaild = false;
+					if (serverSendTextVaild)
+						serverSendTextVaild = false;
 				}
 			});
 		}

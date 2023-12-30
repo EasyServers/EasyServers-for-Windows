@@ -32,6 +32,8 @@ namespace EasyServers
 		private static Panel serverCreateScreen_Software = new Panel();
 		private static Panel serverCreateScreen_EULA = new Panel();
 
+		public static bool mcEULA = false;
+
 		private IContainer? components = null;
 
 		protected override void Dispose(bool disposing)
@@ -96,6 +98,7 @@ namespace EasyServers
 				TabStop = false,
 				TabIndex = 3
 			};
+			serverOperationButton.Click += new EventHandler(ServerOperationButton_Click);
 
 			portOpenFormButton = new Button()
 			{
@@ -274,6 +277,7 @@ namespace EasyServers
 				TabStop = false,
 				TabIndex = 16
 			};
+			nextButton1.Click += new EventHandler(NextButton1_Click);
 
 			undoButton1 = new Button()
 			{
@@ -299,6 +303,26 @@ namespace EasyServers
 			this.Controls.Add(mainMenuPanel);
 			this.Controls.Add(serverCreateScreen_Software);
 			this.Controls.Add(serverCreateScreen_EULA);
+		}
+
+		private void ServerOperationButton_Click(object? sender, EventArgs e)
+		{
+			ServerControlPanelForm fm = new ServerControlPanelForm();
+			fm.Show();
+			this.Hide();
+		}
+
+		private void NextButton1_Click(object? sender, EventArgs e)
+		{
+			mcEULA = true;
+			mainMenuPanel.Enabled = true;
+			mainMenuPanel.Visible = true;
+			serverCreateScreen_EULA.Visible = false;
+			serverCreateScreen_EULA.Enabled = false;
+
+			ServerControlPanelForm fm = new ServerControlPanelForm();
+			fm.Show();
+			this.Hide();
 		}
 
 		private void EulaNoButton_Click(object? sender, EventArgs e)
