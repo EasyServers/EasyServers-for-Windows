@@ -503,10 +503,10 @@ namespace EasyServers
 						StandardInputEncoding = Encoding.GetEncoding("Shift_JIS")
 					};
 					proc.Start();
+					serverAdvStopButton.Enabled = true;
 
 					await Task.Run(async () =>
 					{
-						serverAdvStopButton.Enabled = true;
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
 						if (proc.HasExited)
 						{
