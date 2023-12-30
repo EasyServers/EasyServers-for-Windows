@@ -320,8 +320,11 @@ namespace EasyServers
 			DialogResult result = MessageBox.Show("本当にサーバーを強制停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 			if (result == DialogResult.Yes)
 			{
-				proc.Kill();
-				proc.Close();
+				if (proc != null && !proc.HasExited)
+				{
+					proc.Kill();
+					proc.Close();
+				}
 			}
 		}
 
@@ -441,6 +444,7 @@ namespace EasyServers
 				sCloseSwitch = true;
 				serverSendButton.Enabled = false;
 				serverStopButton.Enabled = false;
+				serverAdvStopButton.Enabled = false;
 				shortcutButton1.Enabled = false;
 				shortcutButton2.Enabled = false;
 				shortcutButton3.Enabled = false;
