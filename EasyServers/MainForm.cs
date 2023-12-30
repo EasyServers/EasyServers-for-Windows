@@ -7,12 +7,18 @@ namespace EasyServers
 {
 	partial class MainForm : Form
 	{
-		private static Panel mainMenuPanel = new Panel();
+		
 		private static PictureBox titlePicture = new PictureBox();
+
 		private static Button serverCreateButton = new Button();
 		private static Button serverOperationButton = new Button();
 		private static Button portOpenFormButton = new Button();
 		private static Button exitButton = new Button();
+		private static Button nextButton1 = new Button();
+		private static Button undoButton1 = new Button();
+
+		private static RadioButton eulaYesButton = new RadioButton();
+		private static RadioButton eulaNoButton = new RadioButton();
 
 		private static TextBox eulaTextBox = new TextBox();
 
@@ -22,6 +28,7 @@ namespace EasyServers
 		private static Label eulaLabel2 = new Label();
 		private static LinkLabel jumpEULALabel = new LinkLabel();
 
+		private static Panel mainMenuPanel = new Panel();
 		private static Panel serverCreateScreen_Software = new Panel();
 		private static Panel serverCreateScreen_EULA = new Panel();
 
@@ -231,14 +238,77 @@ namespace EasyServers
 			};
 			jumpEULALabel.Click += new EventHandler(JumpEULALabel_Click);
 
+			eulaYesButton = new RadioButton()
+			{
+				AutoSize = true,
+				Location = new Point(619, 402),
+				Name = "eulaYesButton",
+				TabIndex = 14,
+				TabStop = true,
+				Text = "はい。同意します。",
+				UseVisualStyleBackColor = true
+			};
+			eulaYesButton.Click += new EventHandler(EulaYesButton_Click);
+
+			eulaNoButton = new RadioButton()
+			{
+				AutoSize = true,
+				Location = new Point(737, 402),
+				Name = "eulaNoButton",
+				TabIndex = 15,
+				TabStop = true,
+				Text = "いいえ。同意しません。",
+				UseVisualStyleBackColor = true
+			};
+			eulaNoButton.Click += new EventHandler(EulaNoButton_Click);
+
+			nextButton1 = new Button()
+			{
+				Name = "nextButton1",
+				Text = "次へ",
+				Size = new Size(75, 23),
+				Location = new Point(793, 430),
+				Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				UseVisualStyleBackColor = true,
+				Enabled = false,
+				TabStop = false,
+				TabIndex = 16
+			};
+
+			undoButton1 = new Button()
+			{
+				Name = "undoButton1",
+				Text = "戻る",
+				Size = new Size(75, 23),
+				Location = new Point(712, 430),
+				Font = new Font("Yu Gothic UI Semibold", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				UseVisualStyleBackColor = true,
+				TabStop = false,
+				TabIndex = 17
+			};
+
 			serverCreateScreen_EULA.Controls.Add(eulaTextBox);
 			serverCreateScreen_EULA.Controls.Add(eulaLabel1);
 			serverCreateScreen_EULA.Controls.Add(eulaLabel2);
 			serverCreateScreen_EULA.Controls.Add(jumpEULALabel);
+			serverCreateScreen_EULA.Controls.Add(eulaYesButton);
+			serverCreateScreen_EULA.Controls.Add(eulaNoButton);
+			serverCreateScreen_EULA.Controls.Add(nextButton1);
+			serverCreateScreen_EULA.Controls.Add(undoButton1);
 
 			this.Controls.Add(mainMenuPanel);
 			this.Controls.Add(serverCreateScreen_Software);
 			this.Controls.Add(serverCreateScreen_EULA);
+		}
+
+		private void EulaNoButton_Click(object? sender, EventArgs e)
+		{
+			nextButton1.Enabled = false;
+		}
+
+		private void EulaYesButton_Click(object? sender, EventArgs e)
+		{
+			nextButton1.Enabled = true;
 		}
 
 		private void JumpEULALabel_Click(object? sender, EventArgs e)
