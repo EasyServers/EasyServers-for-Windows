@@ -12,9 +12,11 @@ namespace EasyServers
 
 		private static TextBox cmdLogTextBox = new TextBox();
 		public static TextBox cmdInputTextBox = new TextBox();
+
 		private static Button serverStartButton = new Button();
 		private static Button serverSendButton = new Button();
 		private static Button serverStopButton = new Button();
+		private static Button serverAdvStopButton = new Button();
 
 		private static Button shortcutButton1 = new Button();
 		private static Button shortcutButton2 = new Button();
@@ -23,6 +25,7 @@ namespace EasyServers
 		private static Button shortcutButton5 = new Button();
 		private static Button shortcutButton6 = new Button();
 		private static Button shortcutButton7 = new Button();
+		private static Button shortcutButton8 = new Button();
 
 		private static Process proc = new Process();
 		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -84,12 +87,13 @@ namespace EasyServers
 
 			serverStartButton = new Button()
 			{
-				Location = new Point(768, 6),
+				Location = new Point(633, 12),
 				Name = "ServerSendButton",
 				Size = new Size(100, 31),
 				TabIndex = 0,
 				Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 128),
 				Text = "サーバー起動",
+				BackColor = Color.Green,
 				Enabled = true,
 				UseVisualStyleBackColor = true
 			};
@@ -193,7 +197,7 @@ namespace EasyServers
 			shortcutButton7 = new Button()
 			{
 				Location = new Point(743, 371),
-				Name = "BANandKickShortCutButton",
+				Name = "BANShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 10,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
@@ -202,14 +206,40 @@ namespace EasyServers
 				UseVisualStyleBackColor = true
 			};
 
-			serverStopButton = new Button()
+			shortcutButton8 = new Button()
 			{
 				Location = new Point(793, 371),
+				Name = "KickShortCutButton",
+				Size = new Size(44, 23),
+				TabIndex = 13,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "Kick",
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			serverAdvStopButton = new Button()
+			{
+				Location = new Point(798, 12),
+				Name = "BANandKickShortCutButton",
+				Size = new Size(70, 31),
+				TabIndex = 12,
+				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
+				Text = "強制停止",
+				BackColor = Color.Red,
+				Enabled = false,
+				UseVisualStyleBackColor = true
+			};
+
+			serverStopButton = new Button()
+			{
+				Location = new Point(739, 12),
 				Name = "SayShortCutButton",
-				Size = new Size(75, 23),
+				Size = new Size(53, 31),
 				TabIndex = 11,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
 				Text = "停止",
+				BackColor = Color.Red,
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
@@ -226,7 +256,9 @@ namespace EasyServers
 			this.Controls.Add(shortcutButton5);
 			this.Controls.Add(shortcutButton6);
 			this.Controls.Add(shortcutButton7);
+			this.Controls.Add(shortcutButton8);
 			this.Controls.Add(serverStopButton);
+			this.Controls.Add(serverAdvStopButton);
 		}
 
 		public static bool sDoneSwitch = false;
