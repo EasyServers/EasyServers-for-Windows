@@ -31,6 +31,7 @@ namespace EasyServers
 		private static Panel mainMenuPanel = new Panel();
 		private static Panel serverCreateScreen_Software = new Panel();
 		private static Panel serverCreateScreen_EULA = new Panel();
+		private static Panel serverOperationScreen = new Panel();
 
 		public static bool mcEULA = false;
 
@@ -290,6 +291,7 @@ namespace EasyServers
 				TabStop = false,
 				TabIndex = 17
 			};
+			undoButton1.Click += new EventHandler(UndoButton1_Click);
 
 			serverCreateScreen_EULA.Controls.Add(eulaTextBox);
 			serverCreateScreen_EULA.Controls.Add(eulaLabel1);
@@ -300,7 +302,20 @@ namespace EasyServers
 			serverCreateScreen_EULA.Controls.Add(nextButton1);
 			serverCreateScreen_EULA.Controls.Add(undoButton1);
 
+			serverOperationScreen = new Panel()
+			{
+				Name = "serverOperationScreen",
+				Dock = DockStyle.Fill,
+				AutoSize = true,
+				Location = new Point(0, 0),
+				BorderStyle = BorderStyle.None,
+				Enabled = false,
+				Visible = false,
+				TabIndex = 9
+			};
+
 			this.Controls.Add(mainMenuPanel);
+			this.Controls.Add(serverOperationScreen);
 			this.Controls.Add(serverCreateScreen_Software);
 			this.Controls.Add(serverCreateScreen_EULA);
 		}
@@ -310,6 +325,12 @@ namespace EasyServers
 			ServerControlPanelForm fm = new ServerControlPanelForm();
 			fm.Show();
 			this.Hide();
+			/*TODO:サーバー一覧画面
+			mainMenuPanel.Enabled = false;
+			mainMenuPanel.Visible = false;
+			serverOperationScreen.Visible = true;
+			serverOperationScreen.Enabled = true;
+			*/
 		}
 
 		private void NextButton1_Click(object? sender, EventArgs e)
@@ -323,6 +344,14 @@ namespace EasyServers
 			ServerSoftwearDownloadForm fm = new ServerSoftwearDownloadForm();
 			fm.Show();
 			this.Hide();
+		}
+
+		private void UndoButton1_Click(object? sender, EventArgs e)
+		{
+			mainMenuPanel.Enabled = true;
+			mainMenuPanel.Visible = true;
+			serverCreateScreen_EULA.Visible = false;
+			serverCreateScreen_EULA.Enabled = false;
 		}
 
 		private void EulaNoButton_Click(object? sender, EventArgs e)
