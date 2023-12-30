@@ -22,12 +22,17 @@ namespace EasyServers
 				}
 				else if (!createdNew)
 				{
-					DialogResult result1 = MessageBox.Show("同じプログラムがすでに実行されています。\r\n実行しますか？", "重複実行警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+					DialogResult result1 = MessageBox.Show("同じプログラムがすでに実行されています。\r\n実行しますか？(Y)それとも強制終了させますか？(N)", "重複実行警告", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 					if (result1 == DialogResult.Yes)
 					{
 						ProgramMainRunning();
 					}
 					else if (result1 == DialogResult.No)
+					{
+						Process.GetCurrentProcess().Kill();
+						Application.Exit();
+					}
+					else if (result1 == DialogResult.Cancel)
 					{
 						Application.Exit();
 					}

@@ -169,6 +169,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton4.Click += new EventHandler(ShortcutButton4_Click);
 
 			shortcutButton5 = new Button()
 			{
@@ -181,6 +182,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton5.Click += new EventHandler(ShortcutButton5_Click);
 
 			shortcutButton6 = new Button()
 			{
@@ -193,6 +195,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton6.Click += new EventHandler(ShortcutButton6_Click);
 
 			shortcutButton7 = new Button()
 			{
@@ -205,6 +208,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton7.Click += new EventHandler(ShortcutButton7_Click);
 
 			shortcutButton8 = new Button()
 			{
@@ -217,6 +221,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			shortcutButton8.Click += new EventHandler(ShortcutButton8_Click);
 
 			serverAdvStopButton = new Button()
 			{
@@ -230,6 +235,7 @@ namespace EasyServers
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
+			serverAdvStopButton.Click += new EventHandler(ServerAdvStopButton_Click);
 
 			serverStopButton = new Button()
 			{
@@ -309,9 +315,19 @@ namespace EasyServers
 			}
 		}
 
+		private void ServerAdvStopButton_Click(object? sender, EventArgs e)
+		{
+			DialogResult result = MessageBox.Show("本当にサーバーを強制停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+			if (result == DialogResult.Yes)
+			{
+				proc.Kill();
+				proc.Close();
+			}
+		}
+
 		private void ServerStopButton_Click(object? sender, EventArgs e)
 		{
-			DialogResult result = MessageBox.Show("本当にサーバーを停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+			DialogResult result = MessageBox.Show("サーバーを停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (result == DialogResult.Yes)
 			{
 				cmdInputTextBox.Text = "stop";
@@ -351,6 +367,11 @@ namespace EasyServers
 		}
 
 		private void ShortcutButton7_Click(object? sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ShortcutButton8_Click(object? sender, EventArgs e)
 		{
 			throw new NotImplementedException();
 		}
