@@ -167,8 +167,8 @@ namespace EasyServers
 
 		private void ServerCreateButton_Click(object? sender, EventArgs e)
 		{
-			ServerControlPanelForm controlPanelForm = new ServerControlPanelForm();
-			controlPanelForm.Show();
+			ServerSoftwearDownloadForm fm = new ServerSoftwearDownloadForm();
+			fm.Show();
 			this.Hide();
 			/*
 			mainMenuPanel.Enabled = false;
@@ -255,12 +255,19 @@ namespace EasyServers
 
 		private static double freeDrive = cDrive.TotalFreeSpace;
 		private static double tortalDrive = cDrive.TotalSize;
+		private static bool sucsessDownloadServerLap = false;
 
 		private async void ServerSoftwearDownloadForm_Shown(object? sender, EventArgs e)
 		{
 			if (await Program.IsNet())
 			{
 				await ServerCreateProcessAsync();
+				if (sucsessDownloadServerLap)
+				{
+					ServerControlPanelForm controlPanelForm = new ServerControlPanelForm();
+					controlPanelForm.Show();
+					this.Close();
+				}
 			}
 			else
 			{
@@ -299,7 +306,7 @@ namespace EasyServers
 					{
 						processLabel.Text = "ファイルの準備をしています...";
 						progressBar.Style = ProgressBarStyle.Marquee;
-						string installFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToString() + @"\" + Program.app_name;
+						string installFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToString() + @"\" + Program.app_name + @"\";
 						if (!Directory.Exists(installFolderPath))
 						{
 							Directory.CreateDirectory(installFolderPath);
@@ -326,9 +333,10 @@ namespace EasyServers
 						string fileName = GetFileNameToUrl(url);
 						await WriteDataToFileAsync(data, installFolderPath + tmpFileName);
 						File.Move(installFolderPath + tmpFileName, installFolderPath + fileName);
-						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);
-						processLabel.Text = "ダウンロードが完了しました。";
+						processLabel.Text = "server.propertiesを書き込んでいます...";
+						await ServerPropertiesWriteAsync($"{Path.GetDirectoryName(installFolderPath)}");
 						processLabel.Text = "後処理をしています...";
+						sucsessDownloadServerLap = true;
 						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);
 					}
 					else
@@ -348,7 +356,7 @@ namespace EasyServers
 		private static string[] gamemode_str = ["survival", "creative", "adventure", "spectator"];
 		private static string[] difficulty_str = ["peaceful", "easy", "normal", "hard"];
 		private static string[] level_type_str = ["normal", "flat", "large_biome", "amplified", "single_biome_surface"];
-		private static async Task ServerPropertiesWriteAsync(string savePath)
+		private static async Task ServerPropertiesWriteAsync(string? savePath)
 		{
 			string[] properties = ["enable-jmx-monitoring", "rcon.port", "level-seed", "gamemode", "enable-command-block", "enable-query", "generator-settings", "enforce-secure-profile", "level-name", "motd", "query.port", "pvp", "generate-structures", "max-chained-neighbor-updates", "difficulty", "network-compression-threshold", "max-tick-time", "require-resource-pack", "use-native-transport", "max-players", "online-mode", "enable-status", "allow-flight", "initial-disabled-packs", "broadcast-rcon-to-ops", "view-distance", "server-ip", "resource-pack-prompt", "allow-nether", "server-port", "enable-rcon", "sync-chunk-writes", "op-permission-level", "prevent-proxy-connections", "hide-online-players", "resource-pack", "entity-broadcast-range-percentage", "simulation-distance", "rcon.password", "player-idle-timeout", "debug", "force-gamemode", "rate-limit", "hardcore", "white-list", "broadcast-console-to-ops", "spawn-npcs", "spawn-animals", "log-ips", "function-permission-level", "initial-enabled-packs", "level-type", "text-filtering-config", "spawn-monsters", "enforce-whitelist", "spawn-protection", "resource-pack-sha1", "max-world-size"];
 			bool enable_jmx_monitoring_prop = false;
@@ -408,10 +416,10 @@ namespace EasyServers
 			string resource_pack_sha1_prop = "";
 			int max_world_size_prop = 29999984;
 
-			using (StreamWriter writer = new StreamWriter(savePath + @"server.properties", false, System.Text.Encoding.UTF8))
+			using (StreamWriter writer = new StreamWriter($"{savePath}\\" + @"server.properties", false, System.Text.Encoding.UTF8))
 			{
 				await writer.WriteLineAsync($"{properties[0]}={enable_jmx_monitoring_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[0]}={rconPort_prop}");
+				await writer.WriteLineAsync($"{properties[1]}={rconPort_prop}");
 				await writer.WriteLineAsync($"{properties[2]}={(string.IsNullOrEmpty(level_seed_prop) ? "" : level_seed_prop)}");
 				await writer.WriteLineAsync($"{properties[3]}={gamemode_prop}");
 				await writer.WriteLineAsync($"{properties[4]}={enable_command_block_prop.ToString().ToLower()}");
@@ -468,7 +476,6 @@ namespace EasyServers
 				await writer.WriteLineAsync($"{properties[55]}={spawn_protection_prop}");
 				await writer.WriteLineAsync($"{properties[56]}={resource_pack_sha1_prop}");
 				await writer.WriteLineAsync($"{properties[57]}={max_world_size_prop}");
-				await writer.WriteLineAsync("");
 			}
 		}
 

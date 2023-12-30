@@ -361,7 +361,6 @@ namespace EasyServers
 						await WriteDataToFileAsync(data, installFolderPath + @"\Java\" + tmpFileName);
 						File.Move(installFolderPath + @"\Java\" + tmpFileName, installFolderPath + @"\Java\" + fileName);
 						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);
-						processLabel.Text = "ダウンロードが完了しました。";
 
 						processLabel.Text = "インストーラを展開してます...";
 						using (Process process = new Process())
@@ -469,7 +468,6 @@ namespace EasyServers
 						await WriteDataToFileAsync(data, installFolderPath + @"\Java\" + tmpFileName);
 						File.Move(installFolderPath + @"\Java\" + tmpFileName, installFolderPath + @"\Java\" + fileName);
 						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);
-						processLabel.Text = "ダウンロードが完了しました。";
 
 						processLabel.Text = "インストーラを展開してます...";
 						using (Process process = new Process())
@@ -576,7 +574,6 @@ namespace EasyServers
 						await WriteDataToFileAsync(data, installFolderPath + @"\Java\" + tmpFileName);
 						File.Move(installFolderPath + @"\Java\" + tmpFileName, installFolderPath + @"\Java\" + fileName);
 						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);
-						processLabel.Text = "ダウンロードが完了しました。";
 
 						processLabel.Text = "インストーラを展開してます...";
 						using (Process process = new Process())
