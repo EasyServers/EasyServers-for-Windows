@@ -332,25 +332,36 @@ namespace EasyServers
 			}
 		}
 
-		private void ServerAdvStopButton_Click(object? sender, EventArgs e)
+		private async void ServerAdvStopButton_Click(object? sender, EventArgs e)
 		{
 			DialogResult result = MessageBox.Show("本当にサーバーを強制停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 			if (result == DialogResult.Yes)
 			{
-				try
+				await ServerAdvStopAsync();
+			}
+		}
+
+		private async Task ServerAdvStopAsync()
+		{
+			try
+			{
+				if (proc != null && !proc.HasExited)
 				{
-					if (proc != null)
-					{
-						Process.GetProcessById(proc.Id).Kill();
-						proc.Close();
-					}
+					proc.Kill();
+					await proc.WaitForExitAsync();
+					proc.Close();
+
+					cmdLogTextBox.Text += $"[{DateTime.Now.ToString(@"HH:mm:ss")} {Program.app_name} System]: サーバーの強制終了が実行されました。\r\n";
 				}
-				finally
-				{
-					cmdLogTextBox.Text += $"[{DateTime.Now.ToString(@"HH:mm:ss")} {Program.app_name} Output Error]: サーバーの強制終了が実行されました。\r\n";
-					sDoneSwitch = false;
-					sCloseSwitch = false;
-				}
+			}
+			catch (Exception ex)
+			{
+				cmdLogTextBox.Text += $"[{DateTime.Now.ToString(@"HH:mm:ss")} {Program.app_name} System Error]: 強制終了の実行中にエラーが発生しました。\r\n{ex.Message}\r\n";
+			}
+			finally
+			{
+				sDoneSwitch = false;
+				sCloseSwitch = false;
 			}
 		}
 
@@ -435,6 +446,7 @@ namespace EasyServers
 					if (proc != null && !proc.HasExited)
 					{
 						proc.Kill();
+						await proc.WaitForExitAsync();
 						proc.Close();
 					}
 				}

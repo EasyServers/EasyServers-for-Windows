@@ -3,6 +3,7 @@ using System.Text;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Diagnostics;
+using System.Xml;
 
 namespace EasyServers
 {
@@ -588,71 +589,71 @@ namespace EasyServers
 			}
 		}
 
-		private static string[] gamemode_str = ["survival", "creative", "adventure", "spectator"];
-		private static string[] difficulty_str = ["peaceful", "easy", "normal", "hard"];
-		private static string[] level_type_str = ["normal", "flat", "large_biome", "amplified", "single_biome_surface"];
+		public readonly static string[] gamemode_str = ["survival", "creative", "adventure", "spectator"];
+		public readonly static string[] difficulty_str = ["peaceful", "easy", "normal", "hard"];
+		public readonly static string[] level_type_str = ["normal", "flat", "large_biome", "amplified", "single_biome_surface"];
+		private readonly static string[] properties_str = ["enable-jmx-monitoring", "rcon.port", "level-seed", "gamemode", "enable-command-block", "enable-query", "generator-settings", "enforce-secure-profile", "level-name", "motd", "query.port", "pvp", "generate-structures", "max-chained-neighbor-updates", "difficulty", "network-compression-threshold", "max-tick-time", "require-resource-pack", "use-native-transport", "max-players", "online-mode", "enable-status", "allow-flight", "initial-disabled-packs", "broadcast-rcon-to-ops", "view-distance", "server-ip", "resource-pack-prompt", "allow-nether", "server-port", "enable-rcon", "sync-chunk-writes", "op-permission-level", "prevent-proxy-connections", "hide-online-players", "resource-pack", "entity-broadcast-range-percentage", "simulation-distance", "rcon.password", "player-idle-timeout", "debug", "force-gamemode", "rate-limit", "hardcore", "white-list", "broadcast-console-to-ops", "spawn-npcs", "spawn-animals", "log-ips", "function-permission-level", "initial-enabled-packs", "level-type", "text-filtering-config", "spawn-monsters", "enforce-whitelist", "spawn-protection", "resource-pack-sha1", "max-world-size"];
+
+		public static bool enable_jmx_monitoring_prop = false;
+		public static int rconPort_prop = 25575;
+		public static int? level_seed_prop = null;
+		public static string gamemode_prop = gamemode_str[0];
+		public static bool enable_command_block_prop = false;
+		public static bool enable_query_prop = false;
+		public static string generator_settings_prop = "";
+		public static bool enforce_secure_profile_prop = true;
+		public static string level_name_prop = "world";
+		public static string motd_prop = "A Minecraft Server";
+		public static int query_port_prop = 25565;
+		public static bool pvp_friendlyFire_prop = true;
+		public static bool generate_structures_prop = true;
+		public static int max_chained_neighbor_updates_prop = 1000000;
+		public static string difficulty_prop = difficulty_str[1];
+		public static int network_compression_threshold_prop = 256;
+		public static long max_tick_time_prop = 60000;
+		public static bool require_resource_pack_prop = false;
+		public static bool use_native_transport_prop = true;
+		public static long max_players_prop = 20;
+		public static bool online_mode_prop = true;
+		public static bool enable_status_prop = true;
+		public static bool allow_flight_prop = true;
+		public static string initial_disabled_packs_prop = "";
+		public static bool broadcast_rcon_to_ops_prop = true;
+		public static int view_distance_prop = 10;
+		public static string server_ip_prop = "";
+		public static string resource_pack_prompt_prop = "";
+		public static bool allow_nether_prop = true;
+		public static int server_port_prop = 25565;
+		public static bool enable_rcon_prop = false;
+		public static bool sync_chunk_writes_prop = false;
+		public static int op_permission_level_prop = 4;
+		public static bool prevent_proxy_connections_prop = false;
+		public static bool hide_online_players_prop = false;
+		public static string resource_pack_prop = "";
+		public static int entity_broadcast_range_percentage = 100;
+		public static int simulation_distance‌_prop = 10;
+		public static string rcon_password_prop = "";
+		public static int player_idle_timeout_prop = 0;
+		public static bool force_gamemode_prop = false;
+		public static int rate_limit_prop = 0;
+		public static bool hardcore_prop = false;
+		public static bool white_list_prop = false;
+		public const bool broadcast_console_to_ops_prop = true;
+		public static bool spawn_npcs_prop = true;
+		public static bool spawn_animals_prop = true;
+		public static int function_permission_level_prop = 2;
+		public static string initial_enabled_packs_prop = "vanilla";
+		public static string level_type_prop = @"minecraft\:" + level_type_str[0];
+		public static string text_filtering_config = "";
+		public static bool spawn_monsters = true;
+		public static bool enforce_whitelist_prop = false;
+		public static int spawn_protection_prop = 16;
+		public static string resource_pack_sha1_prop = "";
+		public static int max_world_size_prop = 29999984;
 		private static async Task ServerPropertiesWriteAsync(string? savePath)
 		{
 			try
 			{
-				string[] properties_str = ["enable-jmx-monitoring", "rcon.port", "level-seed", "gamemode", "enable-command-block", "enable-query", "generator-settings", "enforce-secure-profile", "level-name", "motd", "query.port", "pvp", "generate-structures", "max-chained-neighbor-updates", "difficulty", "network-compression-threshold", "max-tick-time", "require-resource-pack", "use-native-transport", "max-players", "online-mode", "enable-status", "allow-flight", "initial-disabled-packs", "broadcast-rcon-to-ops", "view-distance", "server-ip", "resource-pack-prompt", "allow-nether", "server-port", "enable-rcon", "sync-chunk-writes", "op-permission-level", "prevent-proxy-connections", "hide-online-players", "resource-pack", "entity-broadcast-range-percentage", "simulation-distance", "rcon.password", "player-idle-timeout", "debug", "force-gamemode", "rate-limit", "hardcore", "white-list", "broadcast-console-to-ops", "spawn-npcs", "spawn-animals", "log-ips", "function-permission-level", "initial-enabled-packs", "level-type", "text-filtering-config", "spawn-monsters", "enforce-whitelist", "spawn-protection", "resource-pack-sha1", "max-world-size"];
-				bool enable_jmx_monitoring_prop = false;
-				int rconPort_prop = 25575;
-				int? level_seed_prop = null;
-				string gamemode_prop = gamemode_str[0];
-				bool enable_command_block_prop = false;
-				bool enable_query_prop = false;
-				string generator_settings_prop = "";
-				bool enforce_secure_profile_prop = true;
-				string level_name_prop = "world";
-				string motd_prop = "A Minecraft Server";
-				int query_port_prop = 25565;
-				bool pvp_friendlyFire_prop = true;
-				bool generate_structures_prop = true;
-				int max_chained_neighbor_updates_prop = 1000000;
-				string difficulty_prop = difficulty_str[1];
-				int network_compression_threshold_prop = 256;
-				long max_tick_time_prop = 60000;
-				bool require_resource_pack_prop = false;
-				bool use_native_transport_prop = true;
-				long max_players_prop = 20;
-				bool online_mode_prop = true;
-				bool enable_status_prop = true;
-				bool allow_flight_prop = true;
-				string initial_disabled_packs_prop = "";
-				bool broadcast_rcon_to_ops_prop = true;
-				int view_distance_prop = 10;
-				string server_ip_prop = "";
-				string resource_pack_prompt_prop = "";
-				bool allow_nether_prop = true;
-				int server_port_prop = 25565;
-				bool enable_rcon_prop = false;
-				bool sync_chunk_writes_prop = false;
-				int op_permission_level_prop = 4;
-				bool prevent_proxy_connections_prop = false;
-				bool hide_online_players_prop = false;
-				string resource_pack_prop = "";
-				int entity_broadcast_range_percentage = 100;
-				int simulation_distance‌_prop = 10;
-				string rcon_password_prop = "";
-				int player_idle_timeout_prop = 0;
-				bool force_gamemode_prop = false;
-				int rate_limit_prop = 0;
-				bool hardcore_prop = false;
-				bool white_list_prop = false;
-				const bool broadcast_console_to_ops_prop = true;
-				bool spawn_npcs_prop = true;
-				bool spawn_animals_prop = true;
-				int function_permission_level_prop = 2;
-				string initial_enabled_packs_prop = "vanilla";
-				string level_type_prop = @"minecraft\:" + level_type_str[0];
-				string text_filtering_config = "";
-				bool spawn_monsters = true;
-				bool enforce_whitelist_prop = false;
-				int spawn_protection_prop = 16;
-				string resource_pack_sha1_prop = "";
-				int max_world_size_prop = 29999984;
-
 				var propertiesData = new[]
 				{
 					new {Key = properties_str[0], Value = $"{enable_jmx_monitoring_prop.ToString().ToLower()}"},
