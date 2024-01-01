@@ -712,7 +712,7 @@ namespace EasyServers
 				using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, Encoding.UTF8))
 				{
 					await writer.WriteLineAsync("#Minecraft server properties");
-					await writer.WriteLineAsync($"{DateTime.UtcNow.ToString(@"ddd MMM dd HH:mm:ss UTC yyyy")}");
+					await writer.WriteLineAsync("#"+DateTime.UtcNow.ToString(@"ddd MMM dd HH:mm:ss UTC yyyy"));
 					foreach (var pd in propertiesData)
 					{
 						await writer.WriteLineAsync($"{pd.Key}={pd.Value}");
