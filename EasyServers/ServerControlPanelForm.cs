@@ -202,11 +202,11 @@ namespace EasyServers
 			shortcutButton7 = new Button()
 			{
 				Location = new Point(743, 371),
-				Name = "BANShortCutButton",
+				Name = "BANorKickShortCutButton",
 				Size = new Size(44, 23),
 				TabIndex = 10,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "BAN",
+				Text = "B/K",
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
@@ -215,11 +215,11 @@ namespace EasyServers
 			shortcutButton8 = new Button()
 			{
 				Location = new Point(793, 371),
-				Name = "KickShortCutButton",
-				Size = new Size(44, 23),
+				Name = "ServerReloadShortCutButton",
+				Size = new Size(75, 23),
 				TabIndex = 13,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "Kick",
+				Text = "Reload",
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
