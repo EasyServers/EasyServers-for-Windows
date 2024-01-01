@@ -706,15 +706,21 @@ namespace EasyServers
 				new {Key = properties_str[56], Value = $"{resource_pack_sha1_prop}"},
 				new {Key = properties_str[57], Value = $"{max_world_size_prop}"}
 			};
-
-			using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, Encoding.UTF8))
+			try
 			{
-				await writer.WriteLineAsync("#Minecraft server properties");
-				await writer.WriteLineAsync($"{DateTime.UtcNow.ToString(@"ddd MMM dd HH:mm:ss UTC yyyy")}");
-				foreach (var pd in propertiesData)
+				using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, Encoding.UTF8))
 				{
-					await writer.WriteLineAsync($"{pd.Key}={pd.Value}");
+					await writer.WriteLineAsync("#Minecraft server properties");
+					await writer.WriteLineAsync($"{DateTime.UtcNow.ToString(@"ddd MMM dd HH:mm:ss UTC yyyy")}");
+					foreach (var pd in propertiesData)
+					{
+						await writer.WriteLineAsync($"{pd.Key}={pd.Value}");
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
