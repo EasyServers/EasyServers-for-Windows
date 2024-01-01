@@ -276,6 +276,7 @@ namespace EasyServers
 		{
 			if (fastStart && !string.IsNullOrEmpty(fastStart_Path))
 			{
+				serverStartButton.Enabled = false;
 				await MCServerStartProcessAsync(fastStart_Path);
 			}
 		}
@@ -336,10 +337,19 @@ namespace EasyServers
 			DialogResult result = MessageBox.Show("本当にサーバーを強制停止させますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 			if (result == DialogResult.Yes)
 			{
-				if (proc != null && !proc.HasExited)
+				try
 				{
-					proc.Kill();
-					proc.Close();
+					if (proc != null)
+					{
+						Process.GetProcessById(proc.Id).Kill();
+						proc.Close();
+					}
+				}
+				finally
+				{
+					cmdLogTextBox.Text += $"[{DateTime.Now.ToString(@"HH:mm:ss")} {Program.app_name} Output Error]: サーバーの強制終了が実行されました。\r\n";
+					sDoneSwitch = false;
+					sCloseSwitch = false;
 				}
 			}
 		}
@@ -429,9 +439,12 @@ namespace EasyServers
 					}
 				}
 			}
-			cmdLogTextBox.Text = "";
-			sDoneSwitch = false;
-			sCloseSwitch = false;
+			finally
+			{
+				cmdLogTextBox.Text = "";
+				sDoneSwitch = false;
+				sCloseSwitch = false;
+			}
 		}
 
 		private void ServerControlPanelForm_FormClosed(object? sender, FormClosedEventArgs e)
@@ -454,6 +467,7 @@ namespace EasyServers
 				shortcutButton5.Enabled = true;
 				shortcutButton6.Enabled = true;
 				shortcutButton7.Enabled = true;
+				shortcutButton8.Enabled = true;
 			}
 			else if (Regex.IsMatch(cmdLogTextBox.Text, @"^\[[0-9]+\:[0-9]+\:[0-9]+ INFO\]\: Closing Server", RegexOptions.Multiline) && !sCloseSwitch)
 			{
@@ -468,6 +482,7 @@ namespace EasyServers
 				shortcutButton5.Enabled = false;
 				shortcutButton6.Enabled = false;
 				shortcutButton7.Enabled = false;
+				shortcutButton8.Enabled = false;
 			}
 		}
 
@@ -545,6 +560,7 @@ namespace EasyServers
 							shortcutButton5.Enabled = false;
 							shortcutButton6.Enabled = false;
 							shortcutButton7.Enabled = false;
+							shortcutButton8.Enabled = false;
 						}
 					});
 				}
@@ -579,7 +595,7 @@ namespace EasyServers
 			}
 			catch (Exception ex)
 			{
-				cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Output Error]: " + ex.Message + "\r\n";
+				cmdLogTextBox.Text += $"[{DateTime.Now.ToString(@"HH:mm:ss")} {Program.app_name} Output Error]: {ex.Message}\r\n";
 			}
 		}
 
@@ -612,7 +628,7 @@ namespace EasyServers
 				}
 				catch (Exception ex)
 				{
-					cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer Input Error]: " + ex.Message + "\r\n";
+					cmdLogTextBox.Text += $"[{DateTime.Now.ToString(@"HH:mm:ss")} {Program.app_name} Input Error]: {ex.Message}\r\n";
 					if (serverSendTextVaild)
 						serverSendTextVaild = false;
 				}
