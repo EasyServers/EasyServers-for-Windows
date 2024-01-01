@@ -586,10 +586,10 @@ namespace EasyServers
 		private static string[] level_type_str = ["normal", "flat", "large_biome", "amplified", "single_biome_surface"];
 		private static async Task ServerPropertiesWriteAsync(string? savePath)
 		{
-			string[] properties = ["enable-jmx-monitoring", "rcon.port", "level-seed", "gamemode", "enable-command-block", "enable-query", "generator-settings", "enforce-secure-profile", "level-name", "motd", "query.port", "pvp", "generate-structures", "max-chained-neighbor-updates", "difficulty", "network-compression-threshold", "max-tick-time", "require-resource-pack", "use-native-transport", "max-players", "online-mode", "enable-status", "allow-flight", "initial-disabled-packs", "broadcast-rcon-to-ops", "view-distance", "server-ip", "resource-pack-prompt", "allow-nether", "server-port", "enable-rcon", "sync-chunk-writes", "op-permission-level", "prevent-proxy-connections", "hide-online-players", "resource-pack", "entity-broadcast-range-percentage", "simulation-distance", "rcon.password", "player-idle-timeout", "debug", "force-gamemode", "rate-limit", "hardcore", "white-list", "broadcast-console-to-ops", "spawn-npcs", "spawn-animals", "log-ips", "function-permission-level", "initial-enabled-packs", "level-type", "text-filtering-config", "spawn-monsters", "enforce-whitelist", "spawn-protection", "resource-pack-sha1", "max-world-size"];
+			string[] properties_str = ["enable-jmx-monitoring", "rcon.port", "level-seed", "gamemode", "enable-command-block", "enable-query", "generator-settings", "enforce-secure-profile", "level-name", "motd", "query.port", "pvp", "generate-structures", "max-chained-neighbor-updates", "difficulty", "network-compression-threshold", "max-tick-time", "require-resource-pack", "use-native-transport", "max-players", "online-mode", "enable-status", "allow-flight", "initial-disabled-packs", "broadcast-rcon-to-ops", "view-distance", "server-ip", "resource-pack-prompt", "allow-nether", "server-port", "enable-rcon", "sync-chunk-writes", "op-permission-level", "prevent-proxy-connections", "hide-online-players", "resource-pack", "entity-broadcast-range-percentage", "simulation-distance", "rcon.password", "player-idle-timeout", "debug", "force-gamemode", "rate-limit", "hardcore", "white-list", "broadcast-console-to-ops", "spawn-npcs", "spawn-animals", "log-ips", "function-permission-level", "initial-enabled-packs", "level-type", "text-filtering-config", "spawn-monsters", "enforce-whitelist", "spawn-protection", "resource-pack-sha1", "max-world-size"];
 			bool enable_jmx_monitoring_prop = false;
 			int rconPort_prop = 25575;
-			string? level_seed_prop = "";
+			int? level_seed_prop = null;
 			string gamemode_prop = gamemode_str[0];
 			bool enable_command_block_prop = false;
 			bool enable_query_prop = false;
@@ -644,68 +644,71 @@ namespace EasyServers
 			string resource_pack_sha1_prop = "";
 			int max_world_size_prop = 29999984;
 
-			using (StreamWriter writer = new StreamWriter($"{savePath}\\" + @"server.properties", false, System.Text.Encoding.UTF8))
+			var propertiesData = new[]
 			{
-				await writer.WriteLineAsync("#Minecraft server properties");
-				await writer.WriteLineAsync("#Sat Dec 30 15:55:19 JST 2023");
-				await writer.WriteLineAsync($"{properties[0]}={enable_jmx_monitoring_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[1]}={rconPort_prop}");
-				await writer.WriteLineAsync($"{properties[2]}={(string.IsNullOrEmpty(level_seed_prop) ? "" : level_seed_prop)}");
-				await writer.WriteLineAsync($"{properties[3]}={gamemode_prop}");
-				await writer.WriteLineAsync($"{properties[4]}={enable_command_block_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[5]}={enable_query_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[6]}={"{"+generator_settings_prop+"}"}");
-				await writer.WriteLineAsync($"{properties[7]}={enforce_secure_profile_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[8]}={level_name_prop}");
-				await writer.WriteLineAsync($"{properties[9]}={motd_prop}");
-				await writer.WriteLineAsync($"{properties[10]}={query_port_prop}");
-				await writer.WriteLineAsync($"{properties[11]}={pvp_friendlyFire_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[12]}={generate_structures_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[13]}={max_chained_neighbor_updates_prop}");
-				await writer.WriteLineAsync($"{properties[14]}={difficulty_prop}");
-				await writer.WriteLineAsync($"{properties[15]}={network_compression_threshold_prop}");
-				await writer.WriteLineAsync($"{properties[16]}={max_tick_time_prop}");
-				await writer.WriteLineAsync($"{properties[17]}={require_resource_pack_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[18]}={use_native_transport_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[19]}={max_players_prop}");
-				await writer.WriteLineAsync($"{properties[20]}={online_mode_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[21]}={enable_status_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[22]}={allow_flight_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[23]}={initial_disabled_packs_prop}");
-				await writer.WriteLineAsync($"{properties[24]}={broadcast_rcon_to_ops_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[25]}={view_distance_prop}");
-				await writer.WriteLineAsync($"{properties[26]}={server_ip_prop}");
-				await writer.WriteLineAsync($"{properties[27]}={resource_pack_prompt_prop}");
-				await writer.WriteLineAsync($"{properties[28]}={allow_nether_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[29]}={server_port_prop}");
-				await writer.WriteLineAsync($"{properties[30]}={enable_rcon_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[31]}={sync_chunk_writes_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[32]}={op_permission_level_prop}");
-				await writer.WriteLineAsync($"{properties[33]}={prevent_proxy_connections_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[34]}={hide_online_players_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[35]}={resource_pack_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[36]}={entity_broadcast_range_percentage}");
-				await writer.WriteLineAsync($"{properties[37]}={simulation_distance_prop}");
-				await writer.WriteLineAsync($"{properties[38]}={rcon_password_prop}");
-				await writer.WriteLineAsync($"{properties[39]}={player_idle_timeout_prop}");
-				await writer.WriteLineAsync($"{properties[40]}={force_gamemode_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[41]}={rate_limit_prop}");
-				await writer.WriteLineAsync($"{properties[42]}={hardcore_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[43]}={false.ToString().ToLower()}");//debug
-				await writer.WriteLineAsync($"{properties[44]}={white_list_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[45]}={broadcast_console_to_ops_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[46]}={spawn_npcs_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[47]}={spawn_animals_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[48]}={true.ToString().ToLower()}");//log-ips
-				await writer.WriteLineAsync($"{properties[49]}={function_permission_level_prop}");
-				await writer.WriteLineAsync($"{properties[50]}={initial_enabled_packs_prop}");
-				await writer.WriteLineAsync($"{properties[51]}={level_type_prop}");
-				await writer.WriteLineAsync($"{properties[52]}={text_filtering_config}");
-				await writer.WriteLineAsync($"{properties[53]}={spawn_monsters.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[54]}={enforce_whitelist_prop.ToString().ToLower()}");
-				await writer.WriteLineAsync($"{properties[55]}={spawn_protection_prop}");
-				await writer.WriteLineAsync($"{properties[56]}={resource_pack_sha1_prop}");
-				await writer.WriteLineAsync($"{properties[57]}={max_world_size_prop}");
+				new {Key = properties_str[0], Value = $"{enable_jmx_monitoring_prop.ToString().ToLower()}"},
+				new {Key = properties_str[1], Value = $"{rconPort_prop}"},
+				new {Key = properties_str[2], Value = $"{(level_seed_prop != null ? level_seed_prop.ToString() : string.Empty)}"},
+				new {Key = properties_str[3], Value = $"{gamemode_prop.ToString().ToLower()}"},
+				new {Key = properties_str[4], Value = $"{enable_command_block_prop.ToString().ToLower()}"},
+				new {Key = properties_str[5], Value = $"{enable_query_prop.ToString().ToLower()}"},
+				new {Key = properties_str[6], Value = @"{"+$"{generator_settings_prop}"+@"}"},
+				new {Key = properties_str[7], Value = $"{enforce_secure_profile_prop.ToString().ToLower()}"},
+				new {Key = properties_str[8], Value = $"{level_name_prop}"},
+				new {Key = properties_str[9], Value = $"{motd_prop}"},
+				new {Key = properties_str[10], Value = $"{query_port_prop}"},
+				new {Key = properties_str[11], Value = $"{pvp_friendlyFire_prop.ToString().ToLower()}"},
+				new {Key = properties_str[12], Value = $"{generate_structures_prop.ToString().ToLower()}"},
+				new {Key = properties_str[13], Value = $"{max_chained_neighbor_updates_prop}"},
+				new {Key = properties_str[14], Value = $"{difficulty_prop}"},
+				new {Key = properties_str[15], Value = $"{network_compression_threshold_prop}"},
+				new {Key = properties_str[16], Value = $"{max_tick_time_prop}"},
+				new {Key = properties_str[17], Value = $"{require_resource_pack_prop.ToString().ToLower()}"},
+				new {Key = properties_str[18], Value = $"{use_native_transport_prop.ToString().ToLower()}"},
+				new {Key = properties_str[19], Value = $"{max_players_prop}"},
+				new {Key = properties_str[20], Value = $"{online_mode_prop.ToString().ToLower()}"},
+				new {Key = properties_str[21], Value = $"{enable_status_prop.ToString().ToLower()}"},
+				new {Key = properties_str[22], Value = $"{allow_flight_prop.ToString().ToLower()}"},
+				new {Key = properties_str[23], Value = $"{initial_disabled_packs_prop}"},
+				new {Key = properties_str[24], Value = $"{broadcast_rcon_to_ops_prop.ToString().ToLower()}"},
+				new {Key = properties_str[25], Value = $"{view_distance_prop}"},
+				new {Key = properties_str[26], Value = $"{server_ip_prop}"},
+				new {Key = properties_str[27], Value = $"{resource_pack_prompt_prop}"},
+				new {Key = properties_str[28], Value = $"{allow_nether_prop.ToString().ToLower()}"},
+				new {Key = properties_str[29], Value = $"{server_port_prop}"},
+				new {Key = properties_str[30], Value = $"{enable_rcon_prop.ToString().ToLower()}"},
+				new {Key = properties_str[31], Value = $"{sync_chunk_writes_prop.ToString().ToLower()}"},
+				new {Key = properties_str[32], Value = $"{op_permission_level_prop}"},
+				new {Key = properties_str[33], Value = $"{prevent_proxy_connections_prop.ToString().ToLower()}"},
+				new {Key = properties_str[34], Value = $"{hide_online_players_prop.ToString().ToLower()}"},
+				new {Key = properties_str[35], Value = $"{resource_pack_prop}"},
+				new {Key = properties_str[36], Value = $"{entity_broadcast_range_percentage}"},
+				new {Key = properties_str[37], Value = $"{simulation_distance‌_prop}"},
+				new {Key = properties_str[38], Value = $"{rcon_password_prop}"},
+				new {Key = properties_str[39], Value = $"{player_idle_timeout_prop}"},
+				new {Key = properties_str[40], Value = $"{false.ToString().ToLower()}"},
+				new {Key = properties_str[41], Value = $"{force_gamemode_prop.ToString().ToLower()}"},
+				new {Key = properties_str[42], Value = $"{rate_limit_prop}"},
+				new {Key = properties_str[43], Value = $"{hardcore_prop.ToString().ToLower()}"},
+				new {Key = properties_str[44], Value = $"{white_list_prop.ToString().ToLower()}"},
+				new {Key = properties_str[45], Value = $"{broadcast_console_to_ops_prop.ToString().ToLower()}"},
+				new {Key = properties_str[46], Value = $"{spawn_npcs_prop.ToString().ToLower()}"},
+				new {Key = properties_str[47], Value = $"{spawn_animals_prop.ToString().ToLower()}"},
+				new {Key = properties_str[48], Value = $"{true.ToString().ToLower()}"},
+				new {Key = properties_str[49], Value = $"{function_permission_level_prop}"},
+				new {Key = properties_str[50], Value = $"{initial_enabled_packs_prop}"},
+				new {Key = properties_str[51], Value = $"{level_type_prop}"},
+				new {Key = properties_str[52], Value = $"{text_filtering_config.ToString().ToLower()}"},
+				new {Key = properties_str[53], Value = $"{spawn_monsters.ToString().ToLower()}"},
+				new {Key = properties_str[54], Value = $"{enforce_whitelist_prop.ToString().ToLower()}"},
+				new {Key = properties_str[55], Value = $"{spawn_protection_prop}"},
+				new {Key = properties_str[56], Value = $"{resource_pack_sha1_prop}"},
+				new {Key = properties_str[57], Value = $"{max_world_size_prop}"}
+			};
+
+			using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, System.Text.Encoding.UTF8))
+			{
+				
 			}
 		}
 

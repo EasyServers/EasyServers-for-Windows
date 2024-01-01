@@ -514,7 +514,10 @@ namespace EasyServers
 						await Task.WhenAll(OutputCmdLogAsync(), ServerSendAsync());
 						if (proc.HasExited)
 						{
-							sCloseSwitch = true;
+							if (!sCloseSwitch)
+							{
+								sCloseSwitch = true;
+							}
 							serverStartButton.Enabled = true;
 							serverSendButton.Enabled = false;
 							serverStopButton.Enabled = false;
