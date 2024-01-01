@@ -1,5 +1,4 @@
-﻿using CoreRCON;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -30,8 +29,10 @@ namespace EasyServers
 		private static Process proc = new Process();
 		private static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
-		public static string cmdLog = "";
 		public static bool serverSendTextVaild = false;
+
+		public static bool fastStart = false;
+		public static string fastStart_Path = "";
 
 		public ServerControlPanelForm()
 		{
@@ -48,6 +49,7 @@ namespace EasyServers
 			this.MaximizeBox = false;
 			this.ResumeLayout(false);
 
+			this.Shown += new EventHandler(ServerControlPanelForm_Shown);
 			this.FormClosing += new FormClosingEventHandler(ServerControlPanelForm_FormClosing);
 			this.FormClosed += new FormClosedEventHandler(ServerControlPanelForm_FormClosed);
 
@@ -269,6 +271,15 @@ namespace EasyServers
 
 		public static bool sDoneSwitch = false;
 		public static bool sCloseSwitch = false;
+
+		private async void ServerControlPanelForm_Shown(object? sender, EventArgs e)
+		{
+			if (fastStart && !string.IsNullOrEmpty(fastStart_Path))
+			{
+				await MCServerStartProcessAsync(fastStart_Path);
+			}
+		}
+
 		private async void ServerStartButton_Click(object? sender, EventArgs e)
 		{
 			serverStartButton.Enabled = false;
@@ -285,33 +296,38 @@ namespace EasyServers
 
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
-				try
-				{
-					cmdLogTextBox.Text = "";
-					sDoneSwitch = false;
-					sCloseSwitch = false;
-					if (MainForm.mcEULA)
-					{
-						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(ofd.FileName)}\\eula.txt", false, System.Text.Encoding.UTF8))
-						{
-							writer.WriteLine(@"#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).");
-							writer.WriteLine($"eula={MainForm.mcEULA.ToString().ToLower()}");
-						}
-					}
-					await ExecuteCommandAsync(ofd.FileName, 4, 4);
-				}
-				catch (Exception ex)
-				{
-					cmdLogTextBox.Text = "";
-					sDoneSwitch = false;
-					sCloseSwitch = false;
-					cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer System Error]: " + ex.Message + "\r\n";
-				}
+				await MCServerStartProcessAsync(ofd.FileName);
 			}
 			else
 			{
 				serverStartButton.Enabled = true;
 				ofd.Dispose();
+			}
+		}
+
+		private async Task MCServerStartProcessAsync(string path)
+		{
+			try
+			{
+				cmdLogTextBox.Text = "";
+				sDoneSwitch = false;
+				sCloseSwitch = false;
+				if (MainForm.mcEULA)
+				{
+					using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(path)}\\eula.txt", false))
+					{
+						await writer.WriteLineAsync(@"#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).");
+						await writer.WriteLineAsync("eula=true");
+					}
+				}
+				await ExecuteCommandAsync(path, 4, 4);
+			}
+			catch (Exception ex)
+			{
+				cmdLogTextBox.Text = "";
+				sDoneSwitch = false;
+				sCloseSwitch = false;
+				cmdLogTextBox.Text += "[" + DateTime.Now.ToString(@"HH:mm:ss") + " EasyServer System Error]: " + ex.Message + "\r\n";
 			}
 		}
 

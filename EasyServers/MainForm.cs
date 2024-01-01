@@ -472,6 +472,7 @@ namespace EasyServers
 		private static double tortalDrive = cDrive.TotalSize;
 		private static bool sucsessDownloadServerLap = false;
 
+		private static string _fastStart_Path = "";
 		private async void ServerSoftwearDownloadForm_Shown(object? sender, EventArgs e)
 		{
 			if (await Program.IsNet())
@@ -480,6 +481,10 @@ namespace EasyServers
 				if (sucsessDownloadServerLap)
 				{
 					processLabel.Text = "完了";
+
+					ServerControlPanelForm.fastStart_Path = _fastStart_Path ?? string.Empty;
+					ServerControlPanelForm.fastStart = true;
+
 					ServerControlPanelForm controlPanelForm = new ServerControlPanelForm();
 					controlPanelForm.Show();
 					this.Close();
@@ -566,6 +571,7 @@ namespace EasyServers
 						}
 						processLabel.Text = "後処理をしています...";
 						sucsessDownloadServerLap = true;
+						_fastStart_Path = installFolderPath + fileName;
 						TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.NoProgress);
 					}
 					else
