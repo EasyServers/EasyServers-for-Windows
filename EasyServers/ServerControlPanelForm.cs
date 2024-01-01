@@ -315,7 +315,7 @@ namespace EasyServers
 				sCloseSwitch = false;
 				if (MainForm.mcEULA)
 				{
-					using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(path)}\\eula.txt", false))
+					using (StreamWriter writer = new StreamWriter(@$"{Path.GetDirectoryName(path)}\eula.txt", false))
 					{
 						await writer.WriteLineAsync(@"#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).");
 						await writer.WriteLineAsync("eula=true");
@@ -542,7 +542,7 @@ namespace EasyServers
 						FileName = "cmd.exe",
 						UseShellExecute = false,
 						CreateNoWindow = true,
-						Arguments = $"/c cd {Path.GetDirectoryName(jarFilePath)} & java -Xms{xms.ToString()}G -Xmx{xmx.ToString()}G -jar \"{Path.GetFileName(jarFilePath)}\" nogui",
+						Arguments = @$"/c cd {Path.GetDirectoryName(jarFilePath)} & java -Xms{xms}G -Xmx{xmx}G -jar ""{Path.GetFileName(jarFilePath)}"" nogui",
 						Verb = "RunAs",
 						RedirectStandardOutput = true,
 						RedirectStandardInput = true,

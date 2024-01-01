@@ -4,6 +4,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Diagnostics;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace EasyServers
 {
@@ -115,6 +116,7 @@ namespace EasyServers
 				TabStop = false,
 				TabIndex = 4
 			};
+			portOpenFormButton.Click += new EventHandler(PortOpenFormButton_Click);
 
 			exitButton = new Button()
 			{
@@ -328,6 +330,11 @@ namespace EasyServers
 			this.Controls.Add(serverOperationScreen);
 			this.Controls.Add(serverCreateScreen_Software);
 			this.Controls.Add(serverCreateScreen_VERFIY);
+		}
+
+		private void PortOpenFormButton_Click(object? sender, EventArgs e)
+		{
+			;
 		}
 
 		private void ServerOperationButton_Click(object? sender, EventArgs e)
@@ -558,14 +565,14 @@ namespace EasyServers
 						processLabel.Text = "server.propertiesを書き込んでいます...";
 						await ServerPropertiesWriteAsync($"{Path.GetDirectoryName(installFolderPath)}");
 						processLabel.Text = "起動用ファイルを書き込んでいます...";
-						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.bat", false))
+						using (StreamWriter writer = new StreamWriter(@$"{Path.GetDirectoryName(installFolderPath)}\run.bat", false))
 						{
 							await writer.WriteLineAsync("@echo off");
-							await writer.WriteLineAsync($"java -Xms4G -Xmx4G -jar \"{Path.GetDirectoryName(installFolderPath)}\\{fileName}\" nogui");
+							await writer.WriteLineAsync(@$"java -Xms4G -Xmx4G -jar ""{Path.GetDirectoryName(installFolderPath)}\{fileName}"" nogui");
 						}
-						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.sh", false))
+						using (StreamWriter writer = new StreamWriter(@$"{Path.GetDirectoryName(installFolderPath)}\run.sh", false))
 						{
-							string str = $"java -Xms4G -Xmx4G -jar \"{installFolderPath}{fileName}\" nogui";
+							string str = @$"java -Xms4G -Xmx4G -jar ""{installFolderPath}{fileName}"" nogui";
 							str = str.Replace(@"\", @"\\");
 							await writer.WriteLineAsync("#!/bin/sh");
 							await writer.WriteLineAsync(str);
@@ -816,6 +823,40 @@ namespace EasyServers
 			Uri uri = new Uri(url);
 			string filename = Path.GetFileName(uri.LocalPath);
 			return filename;
+		}
+
+		public static string[] serverListValue = ["無題のサーバー"];
+		public static string[] serverVersionValue = ["1.20.1"];
+		private static void ServerListWriteProsess()
+		{
+			try
+			{
+				using (XmlWriter xmlWriter = XmlWriter.Create($"{Program.app_name}.mc_serverlist.xml"))
+				{
+					//一部テストプログラム
+					xmlWriter.WriteStartElement("list");
+
+					for (int i = 0; i < serverListValue.Length; i++)
+					{
+						xmlWriter.WriteElementString("name", serverListValue[i]);
+
+						xmlWriter.WriteStartElement("mc");
+						xmlWriter.WriteElementString("version", serverVersionValue[i]);
+						xmlWriter.WriteElementString("softwear", "PaperMC");
+						xmlWriter.WriteEndElement();
+
+						xmlWriter.WriteStartElement("info");
+						xmlWriter.WriteElementString("motd", "すごい");
+						xmlWriter.WriteElementString("path", @$"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{Program.app_name}");
+						xmlWriter.WriteEndElement();
+					}
+					xmlWriter.WriteEndElement();
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"サーバーリストの作成中にエラーが発生しました。\r\n{ex.Message}");
+			}
 		}
 	}
 }

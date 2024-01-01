@@ -5,9 +5,9 @@ namespace EasyServers
 {
 	internal partial class Program
 	{
-		public static string? app_name = Application.ProductName;
+		public readonly static string? app_name = Application.ProductName;
 		public const string app_version = "1.0.0";
-		public static Icon ico = Properties.Resources.icon;
+		public readonly static Icon ico = Properties.Resources.icon;
 
 		[STAThread]
 		public static void Main()
