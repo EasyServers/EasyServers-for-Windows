@@ -708,7 +708,10 @@ namespace EasyServers
 
 			using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, System.Text.Encoding.UTF8))
 			{
-				
+				foreach (var pd in propertiesData)
+				{
+					await writer.WriteLineAsync($"{pd.Key}={pd.Value}");
+				}
 			}
 		}
 
