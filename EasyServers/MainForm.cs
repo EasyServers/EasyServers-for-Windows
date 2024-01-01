@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Diagnostics;
@@ -551,12 +552,12 @@ namespace EasyServers
 						processLabel.Text = "server.propertiesを書き込んでいます...";
 						await ServerPropertiesWriteAsync($"{Path.GetDirectoryName(installFolderPath)}");
 						processLabel.Text = "起動用ファイルを書き込んでいます...";
-						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.bat", false, System.Text.Encoding.UTF8))
+						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.bat", false, Encoding.UTF8))
 						{
 							await writer.WriteLineAsync("@echo off");
 							await writer.WriteLineAsync($"java -Xms4G -Xmx4G -jar \"{Path.GetDirectoryName(installFolderPath)}\\{fileName}\" nogui");
 						}
-						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.sh", false, System.Text.Encoding.UTF8))
+						using (StreamWriter writer = new StreamWriter($"{Path.GetDirectoryName(installFolderPath)}\\run.sh", false, Encoding.UTF8))
 						{
 							string str = $"java -Xms4G -Xmx4G -jar \"{installFolderPath}{fileName}\" nogui";
 							str = str.Replace(@"\", @"\\");
@@ -706,8 +707,10 @@ namespace EasyServers
 				new {Key = properties_str[57], Value = $"{max_world_size_prop}"}
 			};
 
-			using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, System.Text.Encoding.UTF8))
+			using (StreamWriter writer = new StreamWriter(savePath + @"\" + @"server.properties", false, Encoding.UTF8))
 			{
+				await writer.WriteLineAsync("#Minecraft server properties");
+				await writer.WriteLineAsync($"{DateTime.UtcNow.ToString(@"ddd MMM dd HH:mm:ss UTC yyyy")}");
 				foreach (var pd in propertiesData)
 				{
 					await writer.WriteLineAsync($"{pd.Key}={pd.Value}");
