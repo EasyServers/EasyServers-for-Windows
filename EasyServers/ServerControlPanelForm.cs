@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -219,7 +218,7 @@ namespace EasyServers
 				Size = new Size(75, 23),
 				TabIndex = 13,
 				Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 128),
-				Text = "Reload",
+				Text = "リロード",
 				Enabled = false,
 				UseVisualStyleBackColor = true
 			};
@@ -413,7 +412,12 @@ namespace EasyServers
 
 		private void ShortcutButton8_Click(object? sender, EventArgs e)
 		{
-			throw new NotImplementedException();
+			DialogResult result = MessageBox.Show("サーバーをリロードさせますか？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (result == DialogResult.Yes)
+			{
+				cmdInputTextBox.Text = "minecraft:reload";
+				serverSendTextVaild = true;
+			}
 		}
 
 		private async void ServerControlPanelForm_FormClosing(object? sender, FormClosingEventArgs e)
@@ -654,6 +658,8 @@ namespace EasyServers
 		private static Button sendButton = new Button();
 		private static TextBox inputTextBox = new TextBox();
 
+		private static bool saySendTextVaild = false;
+
 		public SayCommandShortForm()
 		{
 			this.SuspendLayout();
@@ -673,7 +679,7 @@ namespace EasyServers
 			sendButton = new Button()
 			{
 				Location = new Point(267, 62),
-				Name = "button3",
+				Name = "sendButton",
 				Size = new Size(75, 23),
 				TabIndex = 0,
 				Text = "送信",
@@ -740,17 +746,55 @@ namespace EasyServers
 
 		private void SendButton_Click(object? sender, EventArgs e)
 		{
-			string? str = inputTextBox.Text;
-			SendCommand(str);
+			if (!saySendTextVaild)
+			{
+				string? str = inputTextBox.Text;
+				SendCommand(str);
+			}
 		}
 
-		private void SendCommand(string str)
+		private async void SendCommand(string str)
 		{
 			if (!string.IsNullOrEmpty(str) && ServerControlPanelForm.sDoneSwitch)
 			{
 				ServerControlPanelForm.cmdInputTextBox.Text = "say " + str;
 				ServerControlPanelForm.serverSendTextVaild = true;
 				inputTextBox.Text = "";
+				saySendTextVaild = true;
+				if (saySendTextVaild)
+				{
+					sendButton.Enabled = false;
+					await Task.Run(SendTimer);
+				}
+			}
+		}
+
+		private async Task SendTimer()
+		{
+			if (saySendTextVaild)
+			{
+				try
+				{
+					for (int i = 5; i > 0; i--)
+					{
+						if (i == 0)
+						{
+							sendButton.Text = "送信";
+							sendButton.Enabled = false;
+							break;
+						}
+						else
+						{
+							sendButton.Enabled = false;
+							sendButton.Text = $"送信({i})";
+							await Task.Delay(1000);
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show($"エラーが発生しました:\r\n{ex.Message}", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
 		}
 	}

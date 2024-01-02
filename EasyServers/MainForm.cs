@@ -360,6 +360,7 @@ namespace EasyServers
 
 			ServerSoftwearDownloadForm fm = new ServerSoftwearDownloadForm();
 			fm.Show();
+			ServerSoftwearDownloadForm.serverName[ServerSoftwearDownloadForm.serverName.Length - 1] = serverCreateNameTextBox.Text;
 			this.Hide();
 		}
 
@@ -411,6 +412,8 @@ namespace EasyServers
 		public static ProgressBar progressBar = new ProgressBar();
 		public static Label processLabel = new Label();
 		public static Button cancelButton = new Button();
+
+		public static string[] serverName = [];
 
 		private static DriveInfo cDrive = new DriveInfo("C");
 
@@ -825,7 +828,6 @@ namespace EasyServers
 			return filename;
 		}
 
-		public static string[] serverListValue = ["無題のサーバー"];
 		public static string[] serverVersionValue = ["1.20.1"];
 		private static void ServerListWriteProsess()
 		{
@@ -836,9 +838,9 @@ namespace EasyServers
 					//一部テストプログラム
 					xmlWriter.WriteStartElement("list");
 
-					for (int i = 0; i < serverListValue.Length; i++)
+					for (int i = 0; i < serverName.Length; i++)
 					{
-						xmlWriter.WriteElementString("name", serverListValue[i]);
+						xmlWriter.WriteElementString("name", serverName[i]);
 
 						xmlWriter.WriteStartElement("mc");
 						xmlWriter.WriteElementString("version", serverVersionValue[i]);
