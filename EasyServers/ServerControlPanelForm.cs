@@ -780,7 +780,7 @@ namespace EasyServers
 						if (i == 0)
 						{
 							sendButton.Text = "送信";
-							sendButton.Enabled = false;
+							sendButton.Enabled = true;
 							break;
 						}
 						else
