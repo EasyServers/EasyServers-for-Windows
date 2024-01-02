@@ -775,20 +775,18 @@ namespace EasyServers
 			{
 				try
 				{
-					for (int i = 5; i > -1; i--)
+					int num = 0;
+					for (int i = 3; i > 0; i--)
 					{
-						if (i == 0)
-						{
-							sendButton.Text = "送信";
-							sendButton.Enabled = true;
-							break;
-						}
-						else
-						{
-							sendButton.Enabled = false;
-							sendButton.Text = $"送信({i})";
-							await Task.Delay(1000);
-						}
+						sendButton.Enabled = false;
+						num = i;
+						sendButton.Text = $"送信({i})";
+						await Task.Delay(1000);
+					}
+					if (num == 0)
+					{
+						sendButton.Enabled = true;
+						sendButton.Text = "送信";
 					}
 				}
 				catch (Exception ex)
