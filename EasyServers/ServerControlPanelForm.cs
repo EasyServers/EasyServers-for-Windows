@@ -775,7 +775,7 @@ namespace EasyServers
 			{
 				try
 				{
-					for (int i = 5; i > 0; i--)
+					for (int i = 5; i > -1; i--)
 					{
 						if (i == 0)
 						{
