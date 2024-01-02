@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -775,18 +776,17 @@ namespace EasyServers
 			{
 				try
 				{
-					int num = 0;
-					for (int i = 3; i > 0; i--)
+					for (int i = 4; i > 0; i--)
 					{
+						if (i == 1)
+						{
+							sendButton.Enabled = true;
+							sendButton.Text = "送信";
+							break;
+						}
 						sendButton.Enabled = false;
-						num = i;
-						sendButton.Text = $"送信({i})";
+						sendButton.Text = $"送信({i - 1})";
 						await Task.Delay(1000);
-					}
-					if (num == 0)
-					{
-						sendButton.Enabled = true;
-						sendButton.Text = "送信";
 					}
 				}
 				catch (Exception ex)
